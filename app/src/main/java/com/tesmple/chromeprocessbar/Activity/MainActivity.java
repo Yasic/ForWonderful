@@ -19,6 +19,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private Button btnHistogramActivity;
 
+    /**
+     * 开启折线图的button
+     */
+    private Button btnBrokenLineGraphView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,HistogramActivity.class));
+            }
+        });
+        btnBrokenLineGraphView = (Button)findViewById(R.id.btn_BrokenLineGraphView);
+        btnBrokenLineGraphView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,BrokenLineGraphActivity.class));
             }
         });
     }

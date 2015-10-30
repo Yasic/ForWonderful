@@ -41,12 +41,12 @@ public class HistogramView extends View {
      * 待绘制的矩形块矩阵，left为高度，right为颜色
      */
     private static final int[][] RECT_ARRAY = {
-            {380, Color.parseColor("#3399ff")},
-            {600, Color.parseColor("#9933ff")},
-            {200, Color.parseColor("#ff3399")},
-            {450, Color.parseColor("#33ff99")},
-            {300, Color.parseColor("#99ff33")},
-            {500, Color.parseColor("#ff9933")}
+            {380, Color.parseColor("#3399ff"),Color.parseColor("#663399ff")},
+            {600, Color.parseColor("#9933ff"),Color.parseColor("#669933ff")},
+            {200, Color.parseColor("#ff3399"),Color.parseColor("#66ff3399")},
+            {450, Color.parseColor("#33ff99"),Color.parseColor("#6633ff99")},
+            {300, Color.parseColor("#99ff33"),Color.parseColor("#6699ff33")},
+            {500, Color.parseColor("#ff9933"),Color.parseColor("#66ff9933")}
     };
 
     /**
@@ -91,7 +91,7 @@ public class HistogramView extends View {
                 textPaint.setTextSize(20f);
                 textPaint.setAntiAlias(true);
                 textPaint.setColor(Color.parseColor("#545454"));
-                Shader shader = new LinearGradient(paintXPos, getHeight() - paintYPos, paintXPos + RECT_WIDTH, getHeight(),RECT_ARRAY[i][1], Color.parseColor("#f7f8f3"), Shader.TileMode.REPEAT);
+                Shader shader = new LinearGradient(paintXPos, getHeight() - paintYPos, paintXPos + RECT_WIDTH, getHeight(),RECT_ARRAY[i][1], RECT_ARRAY[i][2], Shader.TileMode.REPEAT);
                 //mPaint.setColor(RECT_ARRAY[i][1]);
                 mPaint.setShader(shader);
                 canvas.drawRect(paintXPos, getHeight() - paintYPos, paintXPos + RECT_WIDTH, getHeight(), mPaint);

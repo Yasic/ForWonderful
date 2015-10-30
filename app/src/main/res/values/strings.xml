@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ForWonderful</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="JumpProcessBarView">JumpProcessBar View</string>
+    <string name="HistogramView">Histogram View</string>
+    <string name="BrokenLineGraphView">BrokenLineGraph View</string>
 </resources>

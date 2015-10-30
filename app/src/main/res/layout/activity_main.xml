@@ -12,12 +12,18 @@
         android:id="@+id/btn_JumpProcessBarActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="view_1"
+        android:text="@string/JumpProcessBarView"
         android:textAllCaps="false"/>
     <Button
         android:id="@+id/btn_HistogramActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="view_2"
+        android:text="@string/HistogramView"
+        android:textAllCaps="false"/>
+    <Button
+        android:id="@+id/btn_BrokenLineGraphView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/BrokenLineGraphView"
         android:textAllCaps="false"/>
 </LinearLayout>

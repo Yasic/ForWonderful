@@ -2,10 +2,22 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context="com.tesmple.chromeprocessbar.Activity.MainActivity">
-    <com.tesmple.chromeprocessbar.Views.Processbar_one
+    <Button
+        android:id="@+id/btn_JumpProcessBarActivity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:text="view_1"
+        android:textAllCaps="false"/>
+    <Button
+        android:id="@+id/btn_HistogramActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="view_2"
+        android:textAllCaps="false"/>
 </LinearLayout>

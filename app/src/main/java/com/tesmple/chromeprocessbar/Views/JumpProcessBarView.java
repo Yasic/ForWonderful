@@ -28,7 +28,7 @@ import java.util.jar.Attributes;
 /**
  * Created by ESIR on 2015/10/27.
  */
-public class Processbar_one extends View {
+public class JumpProcessBarView extends View {
 
     /**
      * 屏幕分辨率
@@ -85,7 +85,31 @@ public class Processbar_one extends View {
      */
     private int radius = 10;
 
-    public Processbar_one(Context context,AttributeSet attrs) {
+    /**
+     * 颜色列表
+     */
+    private static final int[] COLORLIST = {
+            Color.parseColor("#3399ff"),
+            Color.parseColor("#9933ff"),
+            Color.parseColor("#ff3399"),
+            Color.parseColor("#33ff99"),
+            Color.parseColor("#99ff33"),
+            Color.parseColor("#ff9933")
+    };
+
+    /**
+     * 颜色控制参数
+     */
+    private int colorNum = 0;
+
+    /**
+     * 颜色改变一次控制参数
+     */
+    private int colorHasChanged = 0;
+
+    private Paint mPaint;
+
+    public JumpProcessBarView(Context context, AttributeSet attrs) {
         super(context,attrs);
         init();
         initPaint();
@@ -93,6 +117,10 @@ public class Processbar_one extends View {
 
     private void init(){
         denisty = getResources().getDisplayMetrics().density;
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setStrokeWidth(3);
+        mPaint.setStyle(Paint.Style.STROKE);
     }
 
     private void initPaint(){
@@ -133,6 +161,16 @@ public class Processbar_one extends View {
         startX = getWidth()/2;
         endY = getHeight()/2;
         startY = endY * 6/7;
+        if(currentY == startY && colorHasChanged == 0){
+            init();
+            mPaint.setColor(COLORLIST[colorNum]);
+            colorNum = (colorNum+1)%(COLORLIST.length);
+            Log.i("colorNum", String.valueOf(colorNum));
+            colorHasChanged = 1;
+        }
+        if(currentY > (endY + startY)/2){
+            colorHasChanged = 0;
+        }
         if(currentY == 0){
             playAnimation();
         }else {
@@ -148,17 +186,22 @@ public class Processbar_one extends View {
         if(ratio <= 0.3){//当高度比例小于0.3，所在比较高的时候就不进行绘制影子
             return;
         }
+        /*if(ratio == 0){
+            init();
+            mPaint.setColor(COLORLIST[colorNum]);
+            colorNum = (colorNum+1)%(COLORLIST.length);
+        }*/
         int ovalRadius = (int) (radius * ratio * denisty);
-        RectF rectF = new RectF(startX-ovalRadius,endY + 5,startX+ovalRadius,endY + 15);
+        RectF rectF = new RectF(startX-ovalRadius,endY + 10,startX+ovalRadius,endY + 20);
         canvas.drawOval(rectF,greyPaint);
     }
 
     private void drawCircle(Canvas canvas) {
         if(endY - currentY > 30){
-            canvas.drawCircle(startX,currentY,radius * denisty,bluePaint);
+            canvas.drawCircle(startX,currentY,radius * denisty,mPaint);
         }else {
             RectF rectF = new RectF(startX - radius * denisty - 2,currentY - radius * denisty + 5,startX + radius * denisty + 2,currentY + radius * denisty);
-            canvas.drawOval(rectF,bluePaint);
+            canvas.drawOval(rectF,mPaint);
         }
     }
 

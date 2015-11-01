@@ -7,7 +7,4 @@
     <com.tesmple.chromeprocessbar.Views.JumpProcessBarView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    <!--<com.tesmple.chromeprocessbar.Views.HistogramView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />-->
 </LinearLayout>

@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private Button btnBrokenLineGraphView;
 
+    private Button btnRotationProcessBarView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,BrokenLineGraphActivity.class));
+            }
+        });
+        btnRotationProcessBarView = (Button)findViewById(R.id.btn_RotationProcessBarView);
+        btnRotationProcessBarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,RotationProcessBarActivity.class));
             }
         });
     }

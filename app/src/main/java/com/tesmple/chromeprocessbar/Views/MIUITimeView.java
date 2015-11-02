@@ -1,24 +1,22 @@
 package com.tesmple.chromeprocessbar.Views;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 
-import java.util.jar.Attributes;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by ESIR on 2015/11/1.
  */
-public class RotationProcessBarView extends View{
-
+public class MIUITimeView extends View {
     /**
      * 使用的画笔
      */
@@ -42,12 +40,12 @@ public class RotationProcessBarView extends View{
     /**
      * 圆形半径
      */
-    private int radius = 15;
+    private int radius = 72;
 
     /**
      * 圆圈边缘线条长度
      */
-    private int lineLength = 10;
+    private int lineLength = 16;
 
     /**
      * 动画变化时间
@@ -63,6 +61,8 @@ public class RotationProcessBarView extends View{
      * 开始动画标志位
      */
     private int animationBeginFlag = 1;
+
+    private int second = 0;
 
     /**
      * 圆圈颜色渐变列表
@@ -85,23 +85,23 @@ public class RotationProcessBarView extends View{
             {14, Color.parseColor("#8f8f8f")},
     };
 
-    public RotationProcessBarView(Context context , AttributeSet attributeSet) {
+    Handler handler = new Handler(){
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    invalidate();
+                    break;
+            }
+        }
+    };
+
+
+    public MIUITimeView(Context context , AttributeSet attributeSet) {
         super(context, attributeSet);
         initPaint();
     }
 
-    /**
-     * 初始化参数，包括圆心位置
-     */
-    private void initParameter() {
-        denisty = getResources().getDisplayMetrics().density;
-        centerX = getWidth()/2;
-        centerY = getHeight()/2;
-    }
 
-    /**
-     * 初始化画笔
-     */
     private void initPaint(){
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -111,39 +111,49 @@ public class RotationProcessBarView extends View{
 
     @Override
     protected void onDraw(Canvas canvas){
-        initParameter();
-        canvas.drawColor(Color.parseColor("#000000"));
+        canvas.drawColor(Color.parseColor("#3399ff"));
         if(animationBeginFlag == 1){
-            playAnimation();
+            initParameter();
+            startTime();
             animationBeginFlag = 0;
         }
-        canvas.rotate(360 * degreeValue/(ROTATIONCOLORARRAY.length * 2),centerX,centerY);
-        for (int i = 0;i < ROTATIONCOLORARRAY.length * 2;i++){
+        canvas.rotate(360 * second / 60,centerX,centerY);
+        for (int i = 0;i < 60;i++){
             if( i < ROTATIONCOLORARRAY.length){
                 mPaint.setColor(ROTATIONCOLORARRAY[ROTATIONCOLORARRAY.length - i - 1][1]);
                 canvas.drawLine(centerX,centerY - (radius + lineLength) * denisty , centerX, centerY - radius * denisty,mPaint);
-                canvas.rotate(360/(ROTATIONCOLORARRAY.length * 2),centerX,centerY);
+                canvas.rotate(360/60,centerX,centerY);
             }else {
                 canvas.drawLine(centerX,centerY - (radius + lineLength) * denisty , centerX, centerY - radius * denisty,mPaint);
-                canvas.rotate(360/(ROTATIONCOLORARRAY.length * 2),centerX,centerY);
+                canvas.rotate(360/60,centerX,centerY);
             }
         }
     }
 
-
-    private void playAnimation(){
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(0 , ROTATIONCOLORARRAY.length*2 );
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+    /**
+     * 开始时间计数
+     */
+    private void startTime(){
+        Timer timer = new Timer(true);
+        TimerTask timerTask = new TimerTask() {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                degreeValue = (Integer)animation.getAnimatedValue();
-                invalidate();
+            public void run() {
+                second = (second+1)%60;
+                //invalidate();
+                Message message = new Message();
+                message.what = 1;
+                handler.sendMessage(message);
             }
-        });
-        valueAnimator.setInterpolator(new LinearInterpolator());
-        valueAnimator.setRepeatCount(-1);
-        valueAnimator.setRepeatMode(1);
-        valueAnimator.setDuration(animationTime);
-        valueAnimator.start();
+        };
+        timer.schedule(timerTask,0,1000);
+    }
+
+    /**
+     * 初始化参数，包括圆心位置
+     */
+    private void initParameter() {
+        denisty = getResources().getDisplayMetrics().density;
+        centerX = getWidth()/2;
+        centerY = getHeight()/2;
     }
 }

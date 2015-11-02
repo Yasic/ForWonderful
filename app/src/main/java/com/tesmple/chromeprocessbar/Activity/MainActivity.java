@@ -26,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnRotationProcessBarView;
 
+    /**
+     * 开启button
+     */
+    private Button btnMIUITimeView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,RotationProcessBarActivity.class));
+            }
+        });
+        btnMIUITimeView = (Button)findViewById(R.id.btn_MIUITimeView);
+        btnMIUITimeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,MIUITimeActivity.class));
             }
         });
     }

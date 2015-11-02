@@ -21,6 +21,7 @@
         <activity android:name=".Activity.HistogramActivity"/>
         <activity android:name=".Activity.BrokenLineGraphActivity"/>
         <activity android:name=".Activity.RotationProcessBarActivity"/>
+        <activity android:name=".Activity.MIUITimeActivity"/>
     </application>
 
 </manifest>

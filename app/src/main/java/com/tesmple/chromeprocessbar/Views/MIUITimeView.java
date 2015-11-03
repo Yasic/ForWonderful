@@ -2,15 +2,20 @@ package com.tesmple.chromeprocessbar.Views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+
+import com.tesmple.chromeprocessbar.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -141,6 +146,16 @@ public class MIUITimeView extends View {
             startTime();
             animationBeginFlag = 0;
         }
+        canvas.save();
+        canvas.rotate(275, centerX, centerY);
+        mPaint.setStrokeWidth(3);
+        canvas.drawLine(centerX, centerY - 131, centerX, centerY - 7, mPaint);
+        canvas.restore();
+        canvas.save();
+        canvas.rotate(290,centerX,centerY);
+        mPaint.setStrokeWidth(3);
+        canvas.drawLine(centerX,centerY - 90,centerX,centerY - 7,mPaint);
+        canvas.restore();
         mPaint.setColor(Color.parseColor("#f7f8f3"));
         mPaint.setStyle(Paint.Style.STROKE);
         canvas.drawCircle(centerX, centerY, (radius - 20) * denisty, mPaint);

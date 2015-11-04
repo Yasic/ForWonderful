@@ -17,6 +17,7 @@ import android.view.View;
 
 import com.tesmple.chromeprocessbar.R;
 
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -70,14 +71,31 @@ public class MIUITimeView extends View {
     private int animationBeginFlag = 1;
 
     /**
+     * 获取系统时间实例
+     */
+    private Calendar calendar = Calendar.getInstance();
+
+    /**
      * 秒钟数
      */
     private float second = 0.0f;
 
     /**
+     * 小时数
+     */
+    private int hour = 0;
+
+    /**
+     * 分钟数
+     */
+    private int minute = 0;
+
+    private float millis = 0;
+
+    /**
      * 间隔线个数
      */
-    private int septalLineNum = 180;
+    private int septalLineNum = 60;
 
     /**
      * 圆圈颜色渐变列表
@@ -146,27 +164,55 @@ public class MIUITimeView extends View {
             startTime();
             animationBeginFlag = 0;
         }
+
+        /*画时针*/
         canvas.save();
-        canvas.rotate(275, centerX, centerY);
+        canvas.rotate(360*hour/12 + 360*minute/(60*12) , centerX, centerY);
+        mPaint.setStrokeWidth(3);
+        canvas.drawLine(centerX, centerY - 90, centerX, centerY - 7, mPaint);
+        canvas.restore();
+
+        /*画分针*/
+        canvas.save();
+        canvas.rotate(360 * minute /60, centerX, centerY);
         mPaint.setStrokeWidth(3);
         canvas.drawLine(centerX, centerY - 131, centerX, centerY - 7, mPaint);
         canvas.restore();
-        canvas.save();
-        canvas.rotate(290,centerX,centerY);
-        mPaint.setStrokeWidth(3);
-        canvas.drawLine(centerX,centerY - 90,centerX,centerY - 7,mPaint);
-        canvas.restore();
+
         mPaint.setColor(Color.parseColor("#f7f8f3"));
         mPaint.setStyle(Paint.Style.STROKE);
         canvas.drawCircle(centerX, centerY, (radius - 20) * denisty, mPaint);
         mPaint.setStrokeWidth(6);
-        canvas.drawCircle(centerX,centerY,5 * denisty , mPaint);
+        canvas.drawCircle(centerX, centerY, 5 * denisty, mPaint);
         mPaint.setStrokeWidth(2);
         mPaint.setStyle(Paint.Style.FILL);
         canvas.rotate(90,centerX,centerY);
         canvas.rotate(360-90,centerX,centerY);
-        canvas.rotate(2f * second, centerX, centerY);
-        for (int i = 0;i < septalLineNum;i++){
+        canvas.rotate(6f * second, centerX, centerY);
+        for(int i = 0;i < septalLineNum;i++){
+            if( i > septalLineNum - ROTATIONCOLORARRAY.length){
+                mPaint.setColor(ROTATIONCOLORARRAY[septalLineNum - i][1]);
+                canvas.drawLine(centerX, centerY - (radius + lineLength) * denisty, centerX, centerY - radius * denisty, mPaint);
+                canvas.rotate(6f, centerX, centerY);
+            }else {
+                if(i == 0){
+                    mPaint.setColor(ROTATIONCOLORARRAY[0][1]);
+                    Path path = new Path();
+                    path.moveTo(centerX, centerY - (radius - 3)*denisty);
+                    path.lineTo(centerX - 7, centerY - (radius - 10)*denisty);
+                    path.lineTo(centerX + 7, centerY - (radius - 10)*denisty);
+                    path.close();
+                    canvas.drawPath(path, mPaint);
+                    canvas.drawLine(centerX, centerY - (radius + lineLength) * denisty, centerX, centerY - radius * denisty, mPaint);
+                    canvas.rotate(6f, centerX, centerY);
+                    continue;
+                }
+                mPaint.setColor(ROTATIONCOLORARRAY[ROTATIONCOLORARRAY.length - 1][1]);
+                canvas.drawLine(centerX, centerY - (radius + lineLength) * denisty, centerX, centerY - radius * denisty, mPaint);
+                canvas.rotate(6f, centerX, centerY);
+            }
+        }
+        /*for (int i = 0;i < septalLineNum;i++){
             if( i > septalLineNum - ROTATIONCOLORARRAY.length){
                 mPaint.setColor(ROTATIONCOLORARRAY[septalLineNum - i][1]);
                 canvas.drawLine(centerX, centerY - (radius + lineLength) * denisty, centerX, centerY - radius * denisty, mPaint);
@@ -188,7 +234,7 @@ public class MIUITimeView extends View {
                 canvas.drawLine(centerX, centerY - (radius + lineLength) * denisty, centerX, centerY - radius * denisty, mPaint);
                 canvas.rotate(2f, centerX, centerY);
             }
-        }
+        }*/
     }
 
     /**
@@ -199,17 +245,22 @@ public class MIUITimeView extends View {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                if(second != septalLineNum){
+                calendar = Calendar.getInstance();
+                hour = calendar.get(Calendar.HOUR);
+                minute = calendar.get(Calendar.MINUTE);
+                second = calendar.get(Calendar.SECOND);
+                millis = System.currentTimeMillis()%1000;
+                /*if(second != septalLineNum){
                     second = second + 1;
                 }else {
                     second = 0;
-                }
+                }*/
                 Message message = new Message();
                 message.what = 1;
                 handler.sendMessage(message);
             }
         };
-        timer.schedule(timerTask,0,1000/3);
+        timer.schedule(timerTask,0,1000);
     }
 
     /**

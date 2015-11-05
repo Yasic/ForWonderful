@@ -174,7 +174,7 @@ public class MIUITimeView extends View {
 
         /*画分针*/
         canvas.save();
-        canvas.rotate(360 * minute /60, centerX, centerY);
+        canvas.rotate(360 * minute / 60, centerX, centerY);
         mPaint.setStrokeWidth(3);
         canvas.drawLine(centerX, centerY - 131, centerX, centerY - 7, mPaint);
         canvas.restore();
@@ -182,12 +182,18 @@ public class MIUITimeView extends View {
         mPaint.setColor(Color.parseColor("#f7f8f3"));
         mPaint.setStyle(Paint.Style.STROKE);
         canvas.drawCircle(centerX, centerY, (radius - 20) * denisty, mPaint);
+        canvas.save();
+        for(int i = 0;i<360;i = i+30){
+            canvas.drawLine(centerX,centerY-(radius - 25)*denisty,centerX,centerY-(radius - 20)*denisty,mPaint);
+            canvas.rotate(30,centerX,centerY);
+        }
+        canvas.restore();
         mPaint.setStrokeWidth(6);
         canvas.drawCircle(centerX, centerY, 5 * denisty, mPaint);
         mPaint.setStrokeWidth(2);
         mPaint.setStyle(Paint.Style.FILL);
-        canvas.rotate(90,centerX,centerY);
-        canvas.rotate(360-90,centerX,centerY);
+        /*canvas.rotate(90,centerX,centerY);
+        canvas.rotate(360-90,centerX,centerY);*/
         canvas.rotate(6f * second, centerX, centerY);
         for(int i = 0;i < septalLineNum;i++){
             if( i > septalLineNum - ROTATIONCOLORARRAY.length){
@@ -256,7 +262,7 @@ public class MIUITimeView extends View {
                     second = 0;
                 }*/
                 Message message = new Message();
-                message.what = 1;
+                message.what = 1 ;
                 handler.sendMessage(message);
             }
         };

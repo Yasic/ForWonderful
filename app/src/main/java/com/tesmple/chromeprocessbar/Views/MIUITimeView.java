@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.RemoteViews;
 
 import com.tesmple.chromeprocessbar.R;
 
@@ -26,6 +27,7 @@ import java.util.TimerTask;
 /**
  * Created by ESIR on 2015/11/1.
  */
+@RemoteViews.RemoteView
 public class MIUITimeView extends View {
     /**
      * 使用的画笔
@@ -103,9 +105,20 @@ public class MIUITimeView extends View {
      * 圆圈颜色渐变列表
      */
     private static final int[][] ROTATIONCOLORARRAY = {
+            {0, Color.parseColor("#ffffffff")},
+            {0, Color.parseColor("#fffeffff")},
+            {0, Color.parseColor("#fffdfeff")},
+            {0, Color.parseColor("#fffcfdfd")},
+            {0, Color.parseColor("#fffbfcfb")},
+            {0, Color.parseColor("#fffafbf9")},
+            {0, Color.parseColor("#fff9faf7")},
+            {0, Color.parseColor("#fff8f9f5")},
             {0, Color.parseColor("#fff7f8f3")},
             {0, Color.parseColor("#fff7f8f3")},
             {0, Color.parseColor("#fff7f8f3")},
+            /*{0, Color.parseColor("#fff7f8f3")},
+            {0, Color.parseColor("#fff7f8f3")},
+            {0, Color.parseColor("#fff7f8f3")},*/
             {0, Color.parseColor("#fff7f8f3")},
             {0, Color.parseColor("#fff7f8f3")},
             {1, Color.parseColor("#eff7f8f3")},
@@ -205,23 +218,26 @@ public class MIUITimeView extends View {
         for(int i = 0;i < septalLineNum;i++){
             if( i > septalLineNum - ROTATIONCOLORARRAY.length){
                 mPaint.setColor(ROTATIONCOLORARRAY[septalLineNum - i][1]);
-                canvas.drawLine(centerX, centerY - (radius + lineLength) * denisty, centerX, centerY - radius * denisty, mPaint);
+                canvas.drawCircle(centerX, centerY - radius * denisty, 2, mPaint);
+                //canvas.drawLine(centerX, centerY - (radius + lineLength) * denisty, centerX, centerY - radius * denisty, mPaint);
                 canvas.rotate(6f, centerX, centerY);
             }else {
-                if(i == 0){
+                if (i == 0){
                     mPaint.setColor(ROTATIONCOLORARRAY[0][1]);
                     Path path = new Path();
-                    path.moveTo(centerX, centerY - (radius - 3)*denisty);
-                    path.lineTo(centerX - 7, centerY - (radius - 10)*denisty);
-                    path.lineTo(centerX + 7, centerY - (radius - 10)*denisty);
+                    path.moveTo(centerX, centerY - (radius - 3) * denisty);
+                    path.lineTo(centerX - 7, centerY - (radius - 10) * denisty);
+                    path.lineTo(centerX + 7, centerY - (radius - 10) * denisty);
                     path.close();
-                    canvas.drawPath(path, mPaint);
-                    canvas.drawLine(centerX, centerY - (radius + lineLength) * denisty, centerX, centerY - radius * denisty, mPaint);
+                    //canvas.drawPath(path, mPaint);
+                    canvas.drawCircle(centerX,centerY - radius * denisty,2,mPaint);
+                    //canvas.drawLine(centerX, centerY - (radius + lineLength) * denisty, centerX, centerY - radius * denisty, mPaint);
                     canvas.rotate(6f, centerX, centerY);
                     continue;
                 }
                 mPaint.setColor(ROTATIONCOLORARRAY[ROTATIONCOLORARRAY.length - 1][1]);
-                canvas.drawLine(centerX, centerY - (radius + lineLength) * denisty, centerX, centerY - radius * denisty, mPaint);
+                canvas.drawCircle(centerX, centerY - radius * denisty, 2, mPaint);
+                //canvas.drawLine(centerX, centerY - (radius + lineLength) * denisty, centerX, centerY - radius * denisty, mPaint);
                 canvas.rotate(6f, centerX, centerY);
             }
         }

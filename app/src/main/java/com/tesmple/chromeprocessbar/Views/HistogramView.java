@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
@@ -55,6 +56,11 @@ public class HistogramView extends View {
      * 当前高度变化比例，从0到1
      */
     private float currentY = 0.0f;
+
+    /**
+     * 点击监听
+     */
+    private OnInsideTouchListener listener;
 
     public HistogramView(Context context,AttributeSet attrs){
         super(context, attrs);
@@ -109,6 +115,41 @@ public class HistogramView extends View {
                         textPaint);
             }
         }
+    }
+
+    public interface OnInsideTouchListener {
+        void show();
+        void dismiss();
+    }
+
+    public void setOnTouchListener(OnInsideTouchListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                /*float downX = event.getX();
+                float downY = event.getY();
+                boolean inside = isInside(downX, downY);*/
+//                if (inside) {
+//                    if (null != listener) {
+                        listener.show();
+//                    }
+//                } else {
+//                    return false;
+//                }
+//                break;
+            case MotionEvent.ACTION_UP:
+//                if (inside) {
+//                    if (null != listener) {
+                        listener.dismiss();
+//                    }
+//                }
+                break;
+        }
+        return true;
     }
 
     protected void initialize() {

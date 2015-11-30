@@ -4,17 +4,10 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.Shader;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AnticipateInterpolator;
 
 /**
  * Created by ESIR on 2015/10/29.
@@ -23,7 +16,7 @@ public class HistogramView extends View {
     /**
      * 每个矩形块的宽度
      */
-    private int RECT_WIDTH = 60;
+    private int RECT_WIDTH = 50;
 
     /**
      * 矩形块之间的间距
@@ -35,18 +28,27 @@ public class HistogramView extends View {
      */
     private Paint mPaint;
 
-    private int[][] targetData;
+    /**
+     * X轴下方空白高度
+     */
+    private int bottomMargin = 50;
+
+    /**
+     * Y轴左部空白宽度
+     */
+    private int leftMargin = 30;
 
     /**
      * 待绘制的矩形块矩阵，left为高度，right为颜色
      */
     private static final int[][] RECT_ARRAY = {
-            {380, Color.parseColor("#3399ff"),Color.parseColor("#663399ff")},
-            {600, Color.parseColor("#9933ff"),Color.parseColor("#669933ff")},
-            {200, Color.parseColor("#ff3399"),Color.parseColor("#66ff3399")},
-            {450, Color.parseColor("#33ff99"),Color.parseColor("#6633ff99")},
-            {300, Color.parseColor("#99ff33"),Color.parseColor("#6699ff33")},
-            {500, Color.parseColor("#ff9933"),Color.parseColor("#66ff9933")}
+            {380, Color.parseColor("#e51c23"),Color.parseColor("#663399ff")},
+            {600, Color.parseColor("#e91e63"),Color.parseColor("#669933ff")},
+            {200, Color.parseColor("#9c27b0"),Color.parseColor("#66ff3399")},
+            {300, Color.parseColor("#673ab7"),Color.parseColor("#6633ff99")},
+            {450, Color.parseColor("#3f51b5"),Color.parseColor("#6699ff33")},
+            {500, Color.parseColor("#5677fc"),Color.parseColor("#66ff9933")},
+            {420, Color.parseColor("#03a9f4"),Color.parseColor("#66ff9933")}
     };
 
     /**
@@ -56,7 +58,7 @@ public class HistogramView extends View {
 
     public HistogramView(Context context,AttributeSet attrs){
         super(context, attrs);
-        targetData = RECT_ARRAY;
+        //targetData = RECT_ARRAY;
         init();
         initialize();
     }
@@ -64,9 +66,9 @@ public class HistogramView extends View {
     public HistogramView(Context context, AttributeSet attrs , int[][] targetData) {
         super(context, attrs);
         if(targetData != null){
-            this.targetData = RECT_ARRAY;
+            //this.targetData = RECT_ARRAY;
         }else {
-            this.targetData = targetData;
+            //this.targetData = targetData;
         }
         init();
         initialize();
@@ -82,20 +84,29 @@ public class HistogramView extends View {
         init();
         super.onDraw(canvas);
         if(currentY == 0.0f){
+            //canvas.drawLine(0,getHeight() - 30,getWidth(),getHeight() - 30,mPaint);
             playAnimation();
         }else {
             for( int i=0; i < RECT_ARRAY.length; i++ ) {
-                int paintXPos = i*(RECT_WIDTH + RECT_DISTANCE) + RECT_DISTANCE;
+                int paintXPos = i*(RECT_WIDTH + RECT_DISTANCE) + RECT_DISTANCE + leftMargin;
                 float paintYPos = RECT_ARRAY[i][0] * currentY;
                 Paint textPaint = new Paint();
                 textPaint.setTextSize(20f);
                 textPaint.setAntiAlias(true);
                 textPaint.setColor(Color.parseColor("#545454"));
-                Shader shader = new LinearGradient(paintXPos, getHeight() - paintYPos, paintXPos + RECT_WIDTH, getHeight(),RECT_ARRAY[i][1], RECT_ARRAY[i][2], Shader.TileMode.REPEAT);
-                //mPaint.setColor(RECT_ARRAY[i][1]);
-                mPaint.setShader(shader);
-                canvas.drawRect(paintXPos, getHeight() - paintYPos, paintXPos + RECT_WIDTH, getHeight(), mPaint);
-                canvas.drawText(String.valueOf((int) (RECT_ARRAY[i][0] * currentY)),(float)paintXPos + 10,getHeight()-paintYPos - 10,textPaint);
+                mPaint.setColor(Color.parseColor("#545454"));
+                canvas.drawLine(leftMargin, getHeight() - bottomMargin, getWidth(), getHeight() - bottomMargin, mPaint);
+                canvas.drawLine(leftMargin, getHeight() - bottomMargin - 700, leftMargin, getHeight() - bottomMargin,mPaint);
+                mPaint.setColor(Color.parseColor("#009688"));
+                canvas.drawRect(paintXPos,
+                        getHeight() - bottomMargin - paintYPos,
+                        paintXPos + RECT_WIDTH,
+                        getHeight() - bottomMargin,
+                        mPaint);
+                canvas.drawText(String.valueOf((int) (RECT_ARRAY[i][0] * currentY)),
+                        (float)paintXPos + 10,
+                        getHeight()-paintYPos - 10 - bottomMargin,
+                        textPaint);
             }
         }
     }

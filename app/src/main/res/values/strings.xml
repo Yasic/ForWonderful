@@ -6,4 +6,6 @@
     <string name="BrokenLineGraphView">BrokenLineGraph View</string>
     <string name="RotationProcessBarView">RotationProceBar View</string>
     <string name="MIUITimeView">MIUITime View</string>
+    <string name="EditTextView">EditText View</string>
+    <string name="hint_changeinputtransformation">Change transformation</string>
 </resources>

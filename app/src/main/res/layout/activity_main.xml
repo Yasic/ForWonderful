@@ -38,4 +38,10 @@
         android:layout_height="wrap_content"
         android:text="@string/MIUITimeView"
         android:textAllCaps="false"/>
+    <Button
+        android:id="@+id/btn_EditTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/EditTextView"
+        android:textAllCaps="false"/>
 </LinearLayout>

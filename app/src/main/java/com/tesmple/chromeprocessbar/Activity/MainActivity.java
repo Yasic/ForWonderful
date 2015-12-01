@@ -24,12 +24,20 @@ public class MainActivity extends AppCompatActivity {
      */
     private Button btnBrokenLineGraphView;
 
+    /**
+     * 开启旋转圆加载动画的button
+     */
     private Button btnRotationProcessBarView;
 
     /**
-     * 开启button
+     * 开启MIUItimer的button
      */
     private Button btnMIUITimeView;
+
+    /**
+     * 开启测试EditText的button
+     */
+    private Button btnEditTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,38 +48,45 @@ public class MainActivity extends AppCompatActivity {
 
     private void initButton(){
         btnJumpProcessBarActivity = (Button)findViewById(R.id.btn_JumpProcessBarActivity);
-        btnHistogramActivity = (Button)findViewById(R.id.btn_HistogramActivity);
         btnJumpProcessBarActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,JumpProcessBarActivity.class));
+                startActivity(new Intent(MainActivity.this, JumpProcessBarActivity.class));
             }
         });
+        btnHistogramActivity = (Button)findViewById(R.id.btn_HistogramActivity);
         btnHistogramActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,HistogramActivity.class));
+                startActivity(new Intent(MainActivity.this, HistogramActivity.class));
             }
         });
         btnBrokenLineGraphView = (Button)findViewById(R.id.btn_BrokenLineGraphView);
         btnBrokenLineGraphView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,BrokenLineGraphActivity.class));
+                startActivity(new Intent(MainActivity.this, BrokenLineGraphActivity.class));
             }
         });
         btnRotationProcessBarView = (Button)findViewById(R.id.btn_RotationProcessBarView);
         btnRotationProcessBarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,RotationProcessBarActivity.class));
+                startActivity(new Intent(MainActivity.this, RotationProcessBarActivity.class));
             }
         });
         btnMIUITimeView = (Button)findViewById(R.id.btn_MIUITimeView);
         btnMIUITimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,MIUITimeActivity.class));
+                startActivity(new Intent(MainActivity.this, MIUITimeActivity.class));
+            }
+        });
+        btnEditTextView = (Button)findViewById(R.id.btn_EditTextView);
+        btnEditTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, EditTextActivity.class));
             }
         });
     }

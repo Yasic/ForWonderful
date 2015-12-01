@@ -44,4 +44,10 @@
         android:layout_height="wrap_content"
         android:text="@string/EditTextView"
         android:textAllCaps="false"/>
+    <Button
+        android:id="@+id/btn_RecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Header RecyclerView"
+        android:textAllCaps="false"/>
 </LinearLayout>

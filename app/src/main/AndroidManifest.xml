@@ -32,6 +32,7 @@
         <activity android:name=".Activity.RotationProcessBarActivity"/>
         <activity android:name=".Activity.MIUITimeActivity"/>
         <activity android:name=".Activity.EditTextActivity"/>
+        <activity android:name=".Activity.RecyclerViewActivity"/>
     </application>
 
 </manifest>

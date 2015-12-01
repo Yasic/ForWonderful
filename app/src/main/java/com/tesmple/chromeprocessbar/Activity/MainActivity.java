@@ -39,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private Button btnEditTextView;
 
+    /**
+     * 开启RecyclerView的button
+     */
+    private Button btnRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +92,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, EditTextActivity.class));
+            }
+        });
+        btnRecyclerView = (Button)findViewById(R.id.btn_RecyclerView);
+        btnRecyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, RecyclerViewActivity.class));
             }
         });
     }

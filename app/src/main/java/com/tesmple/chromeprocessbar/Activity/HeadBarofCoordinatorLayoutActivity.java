@@ -1,12 +1,16 @@
 package com.tesmple.chromeprocessbar.Activity;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
 import com.tesmple.chromeprocessbar.Adapters.MyListViewHeaderAdapter;
@@ -25,6 +29,7 @@ public class HeadBarofCoordinatorLayoutActivity extends Activity {
     private LinearLayoutManager mLayoutManager;
     private NormalAdapter mNormalAdapter;
     private LinearLayout liFootBar;
+    private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,13 +68,71 @@ public class HeadBarofCoordinatorLayoutActivity extends Activity {
         mRecyclerView.setOnScrollListener(new FootbarRecyclerViewListener() {
             @Override
             public void onHide() {
+                hideFootbar(liFootBar);
                 liFootBar.setVisibility(View.GONE);
             }
+
             @Override
             public void onShow() {
+                showFootbar(liFootBar);
                 liFootBar.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void hideFootbar(final View view) {
+        ViewPropertyAnimator animator = view.animate().translationY(view.getHeight()).setInterpolator(INTERPOLATOR).setDuration(200);
+        animator.setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+
+                view.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+                showFootbar(view);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        animator.start();
+    }
+
+
+    private void showFootbar(final View view) {
+        ViewPropertyAnimator animator = view.animate().translationY(0).setInterpolator(INTERPOLATOR).setDuration(200);
+        animator.setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                view.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+                hideFootbar(view);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        animator.start();
+
     }
 
     private void setHeader(RecyclerView view) {

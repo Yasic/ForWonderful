@@ -69,19 +69,19 @@ public class HeadBarofCoordinatorLayoutActivity extends Activity {
             @Override
             public void onHide() {
                 hideFootbar(liFootBar);
-                liFootBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onShow() {
                 showFootbar(liFootBar);
-                liFootBar.setVisibility(View.VISIBLE);
             }
         });
     }
 
     private void hideFootbar(final View view) {
-        ViewPropertyAnimator animator = view.animate().translationY(view.getHeight()).setInterpolator(INTERPOLATOR).setDuration(200);
+        ViewPropertyAnimator animator = view.animate().
+                translationY(view.getHeight()).
+                setInterpolator(INTERPOLATOR).setDuration(200);
         animator.setListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
@@ -90,7 +90,6 @@ public class HeadBarofCoordinatorLayoutActivity extends Activity {
 
             @Override
             public void onAnimationEnd(Animator animator) {
-
                 view.setVisibility(View.GONE);
             }
 
@@ -109,16 +108,18 @@ public class HeadBarofCoordinatorLayoutActivity extends Activity {
 
 
     private void showFootbar(final View view) {
-        ViewPropertyAnimator animator = view.animate().translationY(0).setInterpolator(INTERPOLATOR).setDuration(200);
+        ViewPropertyAnimator animator = view.animate().
+                translationY(0).
+                setInterpolator(INTERPOLATOR).setDuration(200);
         animator.setListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
-
+                view.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                view.setVisibility(View.VISIBLE);
+
             }
 
             @Override

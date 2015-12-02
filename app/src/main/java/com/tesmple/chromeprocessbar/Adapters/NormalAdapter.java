@@ -53,7 +53,7 @@ public class NormalAdapter extends RecyclerView.Adapter<NormalAdapter.MyViewHold
 
     @Override
     public int getItemCount() {
-        return dataList==null?0:dataList.size();
+        return dataList==null? 0:dataList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

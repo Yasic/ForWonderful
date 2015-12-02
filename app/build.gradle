@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.tesmple.chromeprocessbar"
-        minSdkVersion 11
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -25,4 +25,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
     compile 'com.android.support:recyclerview-v7:21.0.+'
+    compile 'com.jakewharton.scalpel:scalpel:1.1.2'
+    compile 'com.android.support:design:22.2.0'
 }

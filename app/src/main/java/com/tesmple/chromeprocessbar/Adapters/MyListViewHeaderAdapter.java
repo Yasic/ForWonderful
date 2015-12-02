@@ -30,7 +30,7 @@ public class MyListViewHeaderAdapter extends MyHeaderAdapter<String> {
         TextView text;
         public MyHolder(View itemView) {
             super(itemView);
-            text = (TextView) itemView.findViewById(R.id.text);;
+            text = (TextView) itemView.findViewById(R.id.text);
         }
     }
 }

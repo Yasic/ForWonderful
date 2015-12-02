@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private Button btnRecyclerView;
 
+    /**
+     * 滑动显示隐藏头部
+     */
+    private Button btnHeadbarCoordinatorlayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +104,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, RecyclerViewActivity.class));
+            }
+        });
+        btnHeadbarCoordinatorlayout = (Button)findViewById(R.id.btn_HeadbarCoordinatorlayout);
+        btnHeadbarCoordinatorlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, HeadBarofCoordinatorLayoutActivity.class));
             }
         });
     }

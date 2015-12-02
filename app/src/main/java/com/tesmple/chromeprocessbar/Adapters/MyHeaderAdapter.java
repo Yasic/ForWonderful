@@ -20,16 +20,26 @@ import java.util.ResourceBundle;
  */
 public abstract class MyHeaderAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    /**
+     * 两个参数
+     */
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_NORMAL = 1;
 
+    /**
+     * 存储待显示的数据
+     */
     private ArrayList<T> mDatas = new ArrayList<>();
 
+    /**
+     * recyclerview头部布局
+     */
     private View mHeaderView;
 
+    /**
+     * 监听者
+     */
     private OnItemClickListener mListener;
-
-    private Context context;
 
     public void setOnItemClickListener(OnItemClickListener li) {
         mListener = li;

@@ -50,4 +50,10 @@
         android:layout_height="wrap_content"
         android:text="Header RecyclerView"
         android:textAllCaps="false"/>
+    <Button
+        android:id="@+id/btn_HeadbarCoordinatorlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Headbar Coordinatorlayout"
+        android:textAllCaps="false"/>
 </LinearLayout>

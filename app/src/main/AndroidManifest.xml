@@ -33,6 +33,10 @@
         <activity android:name=".Activity.MIUITimeActivity"/>
         <activity android:name=".Activity.EditTextActivity"/>
         <activity android:name=".Activity.RecyclerViewActivity"/>
+        <activity
+            android:name=".Activity.HeadBarofCoordinatorLayoutActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            </activity>
     </application>
 
 </manifest>

@@ -16,11 +16,11 @@ import android.view.animation.Interpolator;
 /**
  * Created by ESIR on 2015/12/2.
  */
-public class HeaderbarBehavior extends CoordinatorLayout.Behavior<View>{
+public class HeaderbarBehavior extends CoordinatorLayout.Behavior<View> {
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
     private int sinceDirectionChange;
-    public HeaderbarBehavior(Context context, AttributeSet attributeSet){
-        super(context, attributeSet);
+    public HeaderbarBehavior(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
     //1.判断滑动的方向 我们需要垂直滑动
@@ -38,8 +38,10 @@ public class HeaderbarBehavior extends CoordinatorLayout.Behavior<View>{
         }
         sinceDirectionChange += dy;
         if (sinceDirectionChange > child.getHeight() && child.getVisibility() == View.VISIBLE) {
+            Log.i("fuck1","1");
             hide(child);
         } else if (sinceDirectionChange < 0 && child.getVisibility() == View.GONE) {
+            Log.i("fuck2","2");
             show(child);
         }
     }

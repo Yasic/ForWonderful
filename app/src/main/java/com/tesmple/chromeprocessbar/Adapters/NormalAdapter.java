@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tesmple.chromeprocessbar.R;
@@ -25,14 +26,17 @@ public class NormalAdapter extends RecyclerView.Adapter<NormalAdapter.MyViewHold
      */
     private List<String> dataList;
 
+    private View targetView;
+
     /**
      * 构造函数
      * @param context 上下文引用
      * @param dataList 数据列表
      */
-    public NormalAdapter(Context context, List<String> dataList){
+    public NormalAdapter(Context context, List<String> dataList, View view){
         this.context = context;
         this.dataList = dataList;
+        this.targetView = view;
     }
 
     @Override
@@ -49,7 +53,7 @@ public class NormalAdapter extends RecyclerView.Adapter<NormalAdapter.MyViewHold
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return dataList==null?0:dataList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

@@ -7,12 +7,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.tesmple.chromeprocessbar.Adapters.MyListViewHeaderAdapter;
 import com.tesmple.chromeprocessbar.Adapters.NormalAdapter;
 import com.tesmple.chromeprocessbar.R;
 
 import java.util.ArrayList;
+
+import Listener.FootbarRecyclerViewListener;
 
 /**
  * Created by ESIR on 2015/12/2.
@@ -21,11 +24,13 @@ public class HeadBarofCoordinatorLayoutActivity extends Activity {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private NormalAdapter mNormalAdapter;
+    private LinearLayout liFootBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_headbarcoordinatorlayout);
         mRecyclerView = (RecyclerView)findViewById(R.id.rl_recyclerview);
+        liFootBar = (LinearLayout)findViewById(R.id.li_footbar);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         ArrayList<String> datas = new ArrayList<>();
@@ -53,15 +58,21 @@ public class HeadBarofCoordinatorLayoutActivity extends Activity {
         datas.add("不求闻达于诸侯");
         datas.add("不求闻达于诸侯");
         datas.add("不求闻达于诸侯");
-        mNormalAdapter = new NormalAdapter(getApplicationContext(), datas);
+        mNormalAdapter = new NormalAdapter(getApplicationContext(), datas, liFootBar);
         mRecyclerView.setAdapter(mNormalAdapter);
-        //mHeaderAdapter.addDatas(datas);
-        //mRecyclerView.setAdapter(mHeaderAdapter);
-        //setHeader(mRecyclerView);
+        mRecyclerView.setOnScrollListener(new FootbarRecyclerViewListener() {
+            @Override
+            public void onHide() {
+                liFootBar.setVisibility(View.GONE);
+            }
+            @Override
+            public void onShow() {
+                liFootBar.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void setHeader(RecyclerView view) {
         View header = LayoutInflater.from(this).inflate(R.layout.layout_recyclerviewheader, view, false);
-        //mHeaderAdapter.setHeaderView(header);
     }
 }

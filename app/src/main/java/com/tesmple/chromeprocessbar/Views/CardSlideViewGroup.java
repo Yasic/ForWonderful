@@ -59,9 +59,10 @@ public class CardSlideViewGroup extends ViewGroup {
      */
     private int childWith=0;
 
-
-    private static final int X_VEL_THRESHOLD = 900;
-    private static final int X_DISTANCE_THRESHOLD = 300;
+    private int downEventX;
+    private int downEventY;
+    private int moveEventX;
+    private int moveEventY;
 
     public CardSlideViewGroup(Context context) {
         super(context);
@@ -95,11 +96,27 @@ public class CardSlideViewGroup extends ViewGroup {
     /* touch事件的拦截与处理都交给mDraghelper来处理 */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return true;
+        return false;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+        int action = e.getActionMasked();
+        switch (action){
+            case MotionEvent.ACTION_DOWN:
+                downEventX = (int)e.getX();
+                downEventY = (int)e.getY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                moveEventX = (int)e.getX();
+                moveEventY = (int)e.getY();
+                playSlideAnim(moveEventX-downEventX, moveEventY-downEventY);
+                downEventX = moveEventX;
+                downEventY = moveEventY;
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+        }
         return true;
     }
 
@@ -109,8 +126,8 @@ public class CardSlideViewGroup extends ViewGroup {
         int maxWidth = MeasureSpec.getSize(widthMeasureSpec);
         int maxHeight = MeasureSpec.getSize(heightMeasureSpec);
         setMeasuredDimension(
-                resolveSizeAndState(120, widthMeasureSpec, 0),
-                resolveSizeAndState(400, heightMeasureSpec, 0));
+                resolveSizeAndState(maxWidth, widthMeasureSpec, 0),
+                resolveSizeAndState(maxHeight, heightMeasureSpec, 0));
         viewGroupWidth = getMeasuredWidth();
         viewGroupHeight = getMeasuredHeight();
     }
@@ -121,12 +138,11 @@ public class CardSlideViewGroup extends ViewGroup {
         for(int i = 0; i < viewListSize; i++){
             View viewItem = viewList.get(i);
             int childHeight = viewItem.getMeasuredHeight();
-            viewItem.layout(l, t, r, t + childHeight);
+            viewItem.layout(l, t, r , b);
             int offset = heightStep * i;
             if(i > 2){
                 offset = heightStep *2;
             }
-
             viewItem.offsetTopAndBottom(offset);
             initCenterViewX = viewList.get(0).getLeft();
             initCenterViewY = viewList.get(0).getTop();
@@ -134,6 +150,14 @@ public class CardSlideViewGroup extends ViewGroup {
         }
     }
 
+    private void playSlideAnim(int dx, int dy){
+        View viewItem = viewList.get(0);
+        int top = viewItem.getTop();
+        int left = viewItem.getLeft();
+        viewItem.layout(left + dx, top + dy, viewItem.getRight() + dx, viewItem.getBottom() + dy);
+        /*viewItem.setTop(top + dy);
+        viewItem.setLeft(left + dx);*/
+    }
 
     public void fillData(List<CardSlideDataItem> dataList) {
         this.cardSlideDataItemList = dataList;

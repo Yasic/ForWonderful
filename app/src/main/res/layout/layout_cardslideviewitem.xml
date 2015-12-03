@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f7f8f3">
+    <ImageView
+        android:id="@+id/iv_cardslide_logo"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:scaleType="fitXY"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_cardslide_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:hint="余烜Yasic"/>
+        <TextView
+            android:id="@+id/tv_cardslide_distance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:hint="10km"/>
+    </LinearLayout>
+</LinearLayout>

@@ -56,4 +56,10 @@
         android:layout_height="wrap_content"
         android:text="Headbar Coordinatorlayout"
         android:textAllCaps="false"/>
+    <Button
+        android:id="@+id/btn_CardslideViewGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CardSlideViewGroup"
+        android:textAllCaps="false"/>
 </LinearLayout>

@@ -49,9 +49,9 @@ public class RecyclerViewActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mHeaderAdapter);
         setHeader(mRecyclerView);
 
-        //scalpelFrameLayout = (ScalpelFrameLayout)findViewById(R.id.scalpelframelayout);
-        //scalpelFrameLayout.setLayerInteractionEnabled(true);
-        //scalpelFrameLayout.setDrawViews(false);
+        scalpelFrameLayout = (ScalpelFrameLayout)findViewById(R.id.scalpelframelayout);
+        scalpelFrameLayout.setLayerInteractionEnabled(true);
+        scalpelFrameLayout.setDrawViews(false);
     }
 
     private void setHeader(RecyclerView view) {

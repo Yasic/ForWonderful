@@ -34,6 +34,7 @@
         <activity android:name=".Activity.EditTextActivity"/>
         <activity android:name=".Activity.RecyclerViewActivity"/>
         <activity android:name=".Activity.HeadBarofCoordinatorLayoutActivity"/>
+        <activity android:name=".Activity.CardSlideActivity"/>
     </application>
 
 </manifest>

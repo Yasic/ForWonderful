@@ -49,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private Button btnHeadbarCoordinatorlayout;
 
+    /**
+     * 启动滑动卡片button
+     */
+    private Button btnCardslideViewGroup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +116,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, HeadBarofCoordinatorLayoutActivity.class));
+            }
+        });
+        btnCardslideViewGroup = (Button)findViewById(R.id.btn_CardslideViewGroup);
+        btnCardslideViewGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, CardSlideActivity.class));
             }
         });
     }

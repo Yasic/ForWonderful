@@ -21,10 +21,13 @@ public class CardSlideActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cardslideview);
         dataItemList = new ArrayList<CardSlideDataItem>();
-        dataItemList.add(new CardSlideDataItem(R.drawable.cardslideview_img1, "Tom", "1km"));
-        dataItemList.add(new CardSlideDataItem(R.drawable.cardslideview_img2,"Jack","2km"));
-        dataItemList.add(new CardSlideDataItem(R.drawable.cardslideview_img3,"Smith","3km"));
-        dataItemList.add(new CardSlideDataItem(R.drawable.cardslideview_img4,"John","4km"));
+        //dataItemList.add(new CardSlideDataItem(R.drawable.headimg1, "Miku", "1km"));
+        dataItemList.add(new CardSlideDataItem(R.drawable.headimg2,"Miku","2km"));
+        dataItemList.add(new CardSlideDataItem(R.drawable.headimg3,"Miku","3km"));
+        dataItemList.add(new CardSlideDataItem(R.drawable.headimg4,"Miku","4km"));
+        dataItemList.add(new CardSlideDataItem(R.drawable.headimg5,"Miku","4km"));
+        dataItemList.add(new CardSlideDataItem(R.drawable.headimg6,"Miku","4km"));
+        dataItemList.add(new CardSlideDataItem(R.drawable.headimg7,"Miku","4km"));
         cardSlideViewGroup = (CardSlideViewGroup)findViewById(R.id.cardslideviewgroup);
         cardSlideViewGroup.fillData(dataItemList);
     }

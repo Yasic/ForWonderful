@@ -8,4 +8,5 @@
     <string name="MIUITimeView">MIUITime View</string>
     <string name="EditTextView">EditText View</string>
     <string name="hint_changeinputtransformation">Change transformation</string>
+    <string name="cardslide_width">270dp</string>
 </resources>

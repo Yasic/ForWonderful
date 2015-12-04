@@ -100,6 +100,16 @@ public class CardSlideViewGroup extends ViewGroup {
     private int frameSlideOutX = 0;
     private int frameSlideOutY = 0;
 
+    /**
+     * 足够远距离的判决条件
+     */
+    private int longDistance = 50;
+
+    /**
+     * 滑出动画时间
+     */
+    private int slideOutTime = 500;
+
     public CardSlideViewGroup(Context context) {
         super(context);
     }
@@ -215,7 +225,7 @@ public class CardSlideViewGroup extends ViewGroup {
      * @return 返回true则足够远可以消失，flase则不够远不能消失
      */
     private boolean viewMoveLongLeft(View viewItem){
-        if(initCenterViewLeft - viewItem.getLeft() > 30){
+        if(initCenterViewLeft - viewItem.getLeft() > longDistance){
             return true;
         }else {
             return false;
@@ -228,16 +238,22 @@ public class CardSlideViewGroup extends ViewGroup {
      * @return 返回true则足够远可以消失，flase则不够远不能消失
      */
     private boolean viewMoveLongRight(View viewItem){
-        if(viewItem.getRight() - initCenterViewRight > 30){
+        //Log.i("right",viewItem.getRight() + "-" + initCenterViewRight + ":" +(viewItem.getRight() - initCenterViewRight));
+        if(viewItem.getRight() - initCenterViewRight > longDistance){
             return true;
         }else {
             return false;
         }
     }
 
-    private void playSlideOutAnimation(final View viewItem,int direction){
+    /**
+     * 进行划出动画
+     * @param viewItemOut 操纵对象view
+     * @param direction 方向，-1为左，1为正
+     */
+    private void playSlideOutAnimation(final View viewItemOut,int direction){
         if(direction == -1){//左
-            valueAnimatorLeftOutX = ValueAnimator.ofInt(viewItem.getLeft(), -initCenterViewLeft).setDuration(500);
+            valueAnimatorLeftOutX = ValueAnimator.ofInt(viewItemOut.getLeft(), -viewItemOut.getWidth()).setDuration(slideAnimationDuration);
             valueAnimatorLeftOutX.start();
             valueAnimatorLeftOutX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -245,17 +261,17 @@ public class CardSlideViewGroup extends ViewGroup {
                     frameSlideOutX = (int) valueAnimatorLeftOutX.getAnimatedValue();
                 }
             });
-            valueAnimatorLeftOutY = ValueAnimator.ofInt(viewItem.getTop(), -initCenterViewTop).setDuration(500);
+            valueAnimatorLeftOutY = ValueAnimator.ofInt(viewItemOut.getTop(), this.getHeight()).setDuration(slideAnimationDuration);
             valueAnimatorLeftOutY.start();
             valueAnimatorLeftOutY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     frameSlideOutY = (int) valueAnimatorLeftOutY.getAnimatedValue();
-                    viewItem.layout( frameSlideOutX, frameSlideOutX + viewItem.getWidth(), frameSlideOutY, frameSlideOutY + viewItem.getHeight());
+                    viewItemOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewItemOut.getWidth(), frameSlideOutY + viewItemOut.getHeight());
                 }
             });
-        } else if (direction == 1){
-            valueAnimatorLeftOutX = ValueAnimator.ofInt(viewItem.getLeft(), viewGroupWidth).setDuration(500);
+        } else if (direction == 1){//右
+            valueAnimatorLeftOutX = ValueAnimator.ofInt(viewItemOut.getLeft(), this.getRight()).setDuration(slideAnimationDuration);
             valueAnimatorLeftOutX.start();
             valueAnimatorLeftOutX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -263,13 +279,13 @@ public class CardSlideViewGroup extends ViewGroup {
                     frameSlideOutX = (int) valueAnimatorLeftOutX.getAnimatedValue();
                 }
             });
-            valueAnimatorLeftOutY = ValueAnimator.ofInt(viewItem.getTop(), viewGroupHeight).setDuration(500);
+            valueAnimatorLeftOutY = ValueAnimator.ofInt(viewItemOut.getTop(), this.getHeight()).setDuration(slideAnimationDuration);
             valueAnimatorLeftOutY.start();
             this.valueAnimatorLeftOutY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     frameSlideOutY = (int)valueAnimatorLeftOutY.getAnimatedValue();
-                    viewItem.layout(frameSlideOutX, frameSlideOutX + viewItem.getWidth(), frameSlideOutY, frameSlideOutY + viewItem.getHeight());
+                    viewItemOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewItemOut.getWidth(), frameSlideOutY + viewItemOut.getHeight());
                 }
             });
         }

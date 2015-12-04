@@ -251,7 +251,7 @@ public class CardSlideViewGroup extends ViewGroup {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     frameSlideOutY = (int) valueAnimatorLeftOutY.getAnimatedValue();
-                    viewItem.layout(frameSlideOutX, frameSlideOutX + viewItem.getWidth(), frameSlideOutY, frameSlideOutY + viewItem.getHeight());
+                    viewItem.layout( frameSlideOutX, frameSlideOutX + viewItem.getWidth(), frameSlideOutY, frameSlideOutY + viewItem.getHeight());
                 }
             });
         } else if (direction == 1){

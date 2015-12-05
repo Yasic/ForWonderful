@@ -86,14 +86,18 @@ public class CardSlideViewGroup extends ViewGroup {
     int frameValueY = 0;
 
     /**
-     * X轴返回动画
+     * X轴滑出动画
      */
     private ValueAnimator valueAnimatorLeftOutX;
 
     /**
-     * Y轴返回动画
+     * Y轴滑出动画
      */
     private ValueAnimator valueAnimatorLeftOutY;
+
+
+    private ValueAnimator valueAnimatorBackX;
+    private ValueAnimator valueAnimatorBackY;
 
     /**
      * 划出动画中间值
@@ -115,6 +119,11 @@ public class CardSlideViewGroup extends ViewGroup {
      * view视图最顶层的下标
      */
     private int CARDNUM = 0;
+
+    /**
+     * 滑出屏幕的view
+     */
+    private View viewSlideOut;
 
     public CardSlideViewGroup(Context context) {
         super(context);
@@ -170,7 +179,7 @@ public class CardSlideViewGroup extends ViewGroup {
                 if(animationFlag == 1){
                     moveEventX = (int)e.getX();
                     moveEventY = (int)e.getY();
-                    setNextView(viewList.get(0).getLeft());
+                    setNextView(viewList.get(CARDNUM).getLeft());
                     playSlideFingerAnim(moveEventX - downEventX, moveEventY - downEventY);
                     downEventX = moveEventX;
                     downEventY = moveEventY;
@@ -178,7 +187,7 @@ public class CardSlideViewGroup extends ViewGroup {
                 break;
             case MotionEvent.ACTION_UP:
                 animationFlag = 0;//恢复flag
-                View viewItem = viewList.get(0);
+                View viewItem = viewList.get(CARDNUM);
                 if(viewMoveLongLeft(viewItem)){
                     playSlideOutAnimation(viewItem,-1);
                 } else if (viewMoveLongRight(viewItem)){
@@ -258,7 +267,7 @@ public class CardSlideViewGroup extends ViewGroup {
      * @param viewOnewX 传入当前X值
      */
     private void setNextView(int viewOnewX){
-        View view1 = viewList.get(1);
+        View view1 = viewList.get((CARDNUM + 1) % viewList.size());
         float percent = Math.abs((float) viewOnewX)/(viewGroupWidth/2);
         if (percent < 1){
             view1.setAlpha(percent);
@@ -266,7 +275,7 @@ public class CardSlideViewGroup extends ViewGroup {
             view1.layout(0, top, view1.getWidth(), top + view1.getHeight());
             Log.i("",(int) (-(float)heightStep * (1.0f-percent))+"");
         }else {
-            viewList.get(1).setAlpha(1.0f);
+            viewList.get((CARDNUM+1) % viewList.size()).setAlpha(1.0f);
             //view1.offsetTopAndBottom(-heightStep);
         }
     }
@@ -277,11 +286,11 @@ public class CardSlideViewGroup extends ViewGroup {
      * @param dy 传入Y移动差值
      */
     private void playSlideFingerAnim(int dx, int dy){
-        if(valueAnimatorLeftOutY != null || valueAnimatorLeftOutX != null){
-            valueAnimatorLeftOutX.cancel();
-            valueAnimatorLeftOutY.cancel();
+        if(valueAnimatorBackX != null || valueAnimatorBackY != null){
+            valueAnimatorBackY.cancel();
+            valueAnimatorBackY.cancel();
         }
-        View viewItem = viewList.get(0);
+        View viewItem = viewList.get(CARDNUM);
         int top = viewItem.getTop();
         int left = viewItem.getLeft();
         viewItem.layout(left + dx, top + dy, viewItem.getRight() + dx, viewItem.getBottom() + dy);
@@ -293,23 +302,23 @@ public class CardSlideViewGroup extends ViewGroup {
      * @param upY 传入的Y开始值
      */
     private void playSlideBackAnim(final int upX, final int upY){
-            final View viewItem = viewList.get(0);
-            valueAnimatorLeftOutX = ValueAnimator.ofInt(upX , initCenterViewLeft);
-            valueAnimatorLeftOutX.setDuration(slideAnimationDuration);
-            valueAnimatorLeftOutX.start();
-            valueAnimatorLeftOutX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            final View viewItem = viewList.get(CARDNUM);
+            valueAnimatorBackX = ValueAnimator.ofInt(upX , initCenterViewLeft);
+            valueAnimatorBackX.setDuration(slideAnimationDuration);
+            valueAnimatorBackX.start();
+            valueAnimatorBackX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    frameValueX = (int) valueAnimatorLeftOutX.getAnimatedValue();
+                    frameValueX = (int) valueAnimatorBackX.getAnimatedValue();
                 }
             });
-            valueAnimatorLeftOutY = ValueAnimator.ofInt(upY , initCenterViewTop);
-            valueAnimatorLeftOutY.setDuration(slideAnimationDuration);
-            valueAnimatorLeftOutY.start();
-            valueAnimatorLeftOutY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            valueAnimatorBackY = ValueAnimator.ofInt(upY , initCenterViewTop);
+            valueAnimatorBackY.setDuration(slideAnimationDuration);
+            valueAnimatorBackY.start();
+        valueAnimatorBackY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    frameValueY = (int) valueAnimatorLeftOutY.getAnimatedValue();
+                    frameValueY = (int) valueAnimatorBackY.getAnimatedValue();
                     setNextView(frameValueX);
                     viewItem.layout(frameValueX, frameValueY, frameValueX + viewItem.getWidth(), frameValueY + viewItem.getHeight());
                     if (frameValueY == initCenterViewLeft) {
@@ -324,8 +333,10 @@ public class CardSlideViewGroup extends ViewGroup {
      * @param viewItemOut 操纵对象view
      * @param direction 方向，-1为左，1为正
      */
-    private void playSlideOutAnimation(final View viewItemOut,int direction){
-        viewList.get(1).setAlpha(1);
+    private void playSlideOutAnimation(View viewItemOut,int direction){
+        viewSlideOut = viewItemOut;
+        viewList.get((CARDNUM+1) % viewList.size()).setAlpha(1);
+        CARDNUM = (CARDNUM+1) % viewList.size();
         if(direction == -1){//左
             valueAnimatorLeftOutX = ValueAnimator.ofInt(viewItemOut.getLeft(), -viewItemOut.getWidth()).setDuration(slideOutTime);
             valueAnimatorLeftOutX.start();
@@ -341,7 +352,10 @@ public class CardSlideViewGroup extends ViewGroup {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     frameSlideOutY = (int) valueAnimatorLeftOutY.getAnimatedValue();
-                    viewItemOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewItemOut.getWidth(), frameSlideOutY + viewItemOut.getHeight());
+                    viewSlideOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewSlideOut.getWidth(), frameSlideOutY + viewSlideOut.getHeight());
+                    /*if (frameSlideOutY == getHeight()){
+                        CARDNUM = (CARDNUM+1) % viewList.size();
+                    }*/
                 }
             });
         } else if (direction == 1){//右
@@ -359,7 +373,11 @@ public class CardSlideViewGroup extends ViewGroup {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     frameSlideOutY = (int)valueAnimatorLeftOutY.getAnimatedValue();
-                    viewItemOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewItemOut.getWidth(), frameSlideOutY + viewItemOut.getHeight());
+                    viewSlideOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewSlideOut.getWidth(), frameSlideOutY + viewSlideOut.getHeight());
+                    /*if (frameSlideOutY == getHeight()){
+                        CARDNUM = (CARDNUM+1) % viewList.size();
+                        Log.i("cardnum",CARDNUM+"");
+                    };*/
                 }
             });
         }
@@ -372,7 +390,7 @@ public class CardSlideViewGroup extends ViewGroup {
      * @return
      */
     private boolean viewContains(int downX, int downY){
-        View viewItem = viewList.get(0);
+        View viewItem = viewList.get(CARDNUM);
         if(downX > viewItem.getLeft() && downY < viewItem.getRight() && downY > viewItem.getTop() && downY < viewItem.getBottom()){
             return true;
         }

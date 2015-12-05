@@ -31,7 +31,7 @@ public class CardSlideViewGroup extends ViewGroup {
     /**
      * view之间位置差值
      */
-    private int heightStep = 30;
+    private int heightStep = 0;
 
     /**
      * 存储卡片数据列表
@@ -164,7 +164,8 @@ public class CardSlideViewGroup extends ViewGroup {
                 if(animationFlag == 1){
                     moveEventX = (int)e.getX();
                     moveEventY = (int)e.getY();
-                    playSlideAnim(moveEventX-downEventX, moveEventY-downEventY);
+                    setNextViewAlpha(viewList.get(0).getLeft());
+                    playSlideFingerAnim(moveEventX - downEventX, moveEventY - downEventY);
                     downEventX = moveEventX;
                     downEventY = moveEventY;
                 }
@@ -195,6 +196,7 @@ public class CardSlideViewGroup extends ViewGroup {
                 resolveSizeAndState(maxHeight, heightMeasureSpec, 0));*/
         viewGroupWidth = getMeasuredWidth();
         viewGroupHeight = getMeasuredHeight();
+        Log.i("child",viewGroupWidth + "");
     }
 
     @Override
@@ -247,47 +249,18 @@ public class CardSlideViewGroup extends ViewGroup {
     }
 
     /**
-     * 进行划出动画
-     * @param viewItemOut 操纵对象view
-     * @param direction 方向，-1为左，1为正
+     * 设置第二个view的透明度
+     * @param viewOnewX 传入当前X值
      */
-    private void playSlideOutAnimation(final View viewItemOut,int direction){
-        if(direction == -1){//左
-            valueAnimatorLeftOutX = ValueAnimator.ofInt(viewItemOut.getLeft(), -viewItemOut.getWidth()).setDuration(slideAnimationDuration);
-            valueAnimatorLeftOutX.start();
-            valueAnimatorLeftOutX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    frameSlideOutX = (int) valueAnimatorLeftOutX.getAnimatedValue();
-                }
-            });
-            valueAnimatorLeftOutY = ValueAnimator.ofInt(viewItemOut.getTop(), this.getHeight()).setDuration(slideAnimationDuration);
-            valueAnimatorLeftOutY.start();
-            valueAnimatorLeftOutY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    frameSlideOutY = (int) valueAnimatorLeftOutY.getAnimatedValue();
-                    viewItemOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewItemOut.getWidth(), frameSlideOutY + viewItemOut.getHeight());
-                }
-            });
-        } else if (direction == 1){//右
-            valueAnimatorLeftOutX = ValueAnimator.ofInt(viewItemOut.getLeft(), this.getRight()).setDuration(slideAnimationDuration);
-            valueAnimatorLeftOutX.start();
-            valueAnimatorLeftOutX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    frameSlideOutX = (int) valueAnimatorLeftOutX.getAnimatedValue();
-                }
-            });
-            valueAnimatorLeftOutY = ValueAnimator.ofInt(viewItemOut.getTop(), this.getHeight()).setDuration(slideAnimationDuration);
-            valueAnimatorLeftOutY.start();
-            this.valueAnimatorLeftOutY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    frameSlideOutY = (int)valueAnimatorLeftOutY.getAnimatedValue();
-                    viewItemOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewItemOut.getWidth(), frameSlideOutY + viewItemOut.getHeight());
-                }
-            });
+    private void setNextViewAlpha(int viewOnewX){
+        /*if(initCenterViewLeft == 0){
+            initCenterViewLeft = 1;
+        }*/
+        Log.i("viewOneX",viewOnewX + "");
+        if (Math.abs((float) viewOnewX)/(viewGroupWidth/2) < 1){
+            viewList.get(1).setAlpha(Math.abs((float)viewOnewX)/ (viewGroupWidth/2));
+        }else {
+            viewList.get(1).setAlpha(1.0f);
         }
     }
 
@@ -296,7 +269,7 @@ public class CardSlideViewGroup extends ViewGroup {
      * @param dx 传入X移动差值
      * @param dy 传入Y移动差值
      */
-    private void playSlideAnim(int dx, int dy){
+    private void playSlideFingerAnim(int dx, int dy){
         if(valueAnimatorLeftOutY != null || valueAnimatorLeftOutX != null){
             valueAnimatorLeftOutX.cancel();
             valueAnimatorLeftOutY.cancel();
@@ -330,12 +303,59 @@ public class CardSlideViewGroup extends ViewGroup {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     frameValueY = (int) valueAnimatorLeftOutY.getAnimatedValue();
+                    setNextViewAlpha(frameValueX);
                     viewItem.layout(frameValueX, frameValueY, frameValueX + viewItem.getWidth(), frameValueY + viewItem.getHeight());
                     if (frameValueY == initCenterViewLeft) {
                         animationFlag = 0;
                     }
                 }
             });
+    }
+
+    /**
+     * 进行划出动画
+     * @param viewItemOut 操纵对象view
+     * @param direction 方向，-1为左，1为正
+     */
+    private void playSlideOutAnimation(final View viewItemOut,int direction){
+        viewList.get(1).setAlpha(1);
+        if(direction == -1){//左
+            valueAnimatorLeftOutX = ValueAnimator.ofInt(viewItemOut.getLeft(), -viewItemOut.getWidth()).setDuration(slideOutTime);
+            valueAnimatorLeftOutX.start();
+            valueAnimatorLeftOutX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    frameSlideOutX = (int) valueAnimatorLeftOutX.getAnimatedValue();
+                }
+            });
+            valueAnimatorLeftOutY = ValueAnimator.ofInt(viewItemOut.getTop(), this.getHeight()).setDuration(slideOutTime);
+            valueAnimatorLeftOutY.start();
+            valueAnimatorLeftOutY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    frameSlideOutY = (int) valueAnimatorLeftOutY.getAnimatedValue();
+                    viewItemOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewItemOut.getWidth(), frameSlideOutY + viewItemOut.getHeight());
+                }
+            });
+        } else if (direction == 1){//右
+            valueAnimatorLeftOutX = ValueAnimator.ofInt(viewItemOut.getLeft(), this.getRight()).setDuration(slideOutTime);
+            valueAnimatorLeftOutX.start();
+            valueAnimatorLeftOutX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    frameSlideOutX = (int) valueAnimatorLeftOutX.getAnimatedValue();
+                }
+            });
+            valueAnimatorLeftOutY = ValueAnimator.ofInt(viewItemOut.getTop(), this.getHeight()).setDuration(slideOutTime);
+            valueAnimatorLeftOutY.start();
+            this.valueAnimatorLeftOutY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    frameSlideOutY = (int)valueAnimatorLeftOutY.getAnimatedValue();
+                    viewItemOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewItemOut.getWidth(), frameSlideOutY + viewItemOut.getHeight());
+                }
+            });
+        }
     }
 
     /**
@@ -361,9 +381,13 @@ public class CardSlideViewGroup extends ViewGroup {
         int num = viewList.size();
         for (int i = 0; i < num; i++) {
             CardSlideViewItem itemView = viewList.get(i);
-            Log.i("datalist",i+":"+dataList.get(i).cardslideImgPath);
+            Log.i("datalist", i + ":" + dataList.get(i).cardslideImgPath);
             itemView.setData(dataList.get(i));
-            itemView.setVisibility(View.VISIBLE);
+            if (i != 0){
+                itemView.setAlpha(0f);
+            }else {
+                itemView.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

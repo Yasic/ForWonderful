@@ -2,6 +2,7 @@ package com.tesmple.chromeprocessbar.Views;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -31,7 +32,7 @@ public class CardSlideViewGroup extends ViewGroup {
     /**
      * view之间位置差值
      */
-    private int heightStep = 0;
+    private int heightStep = 30;
 
     /**
      * 存储卡片数据列表
@@ -110,6 +111,11 @@ public class CardSlideViewGroup extends ViewGroup {
      */
     private int slideOutTime = 500;
 
+    /**
+     * view视图最顶层的下标
+     */
+    private int CARDNUM = 0;
+
     public CardSlideViewGroup(Context context) {
         super(context);
     }
@@ -164,7 +170,7 @@ public class CardSlideViewGroup extends ViewGroup {
                 if(animationFlag == 1){
                     moveEventX = (int)e.getX();
                     moveEventY = (int)e.getY();
-                    setNextViewAlpha(viewList.get(0).getLeft());
+                    setNextView(viewList.get(0).getLeft());
                     playSlideFingerAnim(moveEventX - downEventX, moveEventY - downEventY);
                     downEventX = moveEventX;
                     downEventY = moveEventY;
@@ -196,7 +202,6 @@ public class CardSlideViewGroup extends ViewGroup {
                 resolveSizeAndState(maxHeight, heightMeasureSpec, 0));*/
         viewGroupWidth = getMeasuredWidth();
         viewGroupHeight = getMeasuredHeight();
-        Log.i("child",viewGroupWidth + "");
     }
 
     @Override
@@ -252,15 +257,17 @@ public class CardSlideViewGroup extends ViewGroup {
      * 设置第二个view的透明度
      * @param viewOnewX 传入当前X值
      */
-    private void setNextViewAlpha(int viewOnewX){
-        /*if(initCenterViewLeft == 0){
-            initCenterViewLeft = 1;
-        }*/
-        Log.i("viewOneX",viewOnewX + "");
-        if (Math.abs((float) viewOnewX)/(viewGroupWidth/2) < 1){
-            viewList.get(1).setAlpha(Math.abs((float)viewOnewX)/ (viewGroupWidth/2));
+    private void setNextView(int viewOnewX){
+        View view1 = viewList.get(1);
+        float percent = Math.abs((float) viewOnewX)/(viewGroupWidth/2);
+        if (percent < 1){
+            view1.setAlpha(percent);
+            int top = cardmarginTop + (int)(((float)heightStep)*(1.0f-percent));
+            view1.layout(0, top, view1.getWidth(), top + view1.getHeight());
+            Log.i("",(int) (-(float)heightStep * (1.0f-percent))+"");
         }else {
             viewList.get(1).setAlpha(1.0f);
+            //view1.offsetTopAndBottom(-heightStep);
         }
     }
 
@@ -303,7 +310,7 @@ public class CardSlideViewGroup extends ViewGroup {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     frameValueY = (int) valueAnimatorLeftOutY.getAnimatedValue();
-                    setNextViewAlpha(frameValueX);
+                    setNextView(frameValueX);
                     viewItem.layout(frameValueX, frameValueY, frameValueX + viewItem.getWidth(), frameValueY + viewItem.getHeight());
                     if (frameValueY == initCenterViewLeft) {
                         animationFlag = 0;

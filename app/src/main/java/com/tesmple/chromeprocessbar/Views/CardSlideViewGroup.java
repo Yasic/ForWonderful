@@ -32,7 +32,7 @@ public class CardSlideViewGroup extends ViewGroup {
     /**
      * view之间位置差值
      */
-    private int heightStep = 30;
+    private int heightStep = 150;
 
     /**
      * 存储卡片数据列表
@@ -113,7 +113,7 @@ public class CardSlideViewGroup extends ViewGroup {
     /**
      * 滑出动画时间
      */
-    private int slideOutTime = 500;
+    private int slideOutTime = 300;
 
     /**
      * view视图最顶层的下标
@@ -121,9 +121,19 @@ public class CardSlideViewGroup extends ViewGroup {
     private int CARDNUM = 0;
 
     /**
-     * 滑出屏幕的view
+     * 滑出屏幕的view数组，我承认这样很low
+     */
+    private View viewSlideOutList[] = new View[4];
+
+    /**
+     * 滑出view
      */
     private View viewSlideOut;
+
+    /**
+     * 初始化图片集最后一张坐标
+     */
+    private int cardIndex = 0;
 
     public CardSlideViewGroup(Context context) {
         super(context);
@@ -145,7 +155,7 @@ public class CardSlideViewGroup extends ViewGroup {
         for(int i = num -1; i >= 0; i--){
             View childView = getChildAt(i);
             CardSlideViewItem cardSlideViewItem = (CardSlideViewItem)childView;
-            cardSlideViewItem.setTag(i + 1);
+            cardSlideViewItem.setTag(i);
             viewList.add(cardSlideViewItem);
         }
     }
@@ -154,7 +164,6 @@ public class CardSlideViewGroup extends ViewGroup {
 
     }
 
-    /* touch事件的拦截与处理都交给mDraghelper来处理 */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         return false;
@@ -172,10 +181,8 @@ public class CardSlideViewGroup extends ViewGroup {
                 }else {
                     animationFlag = 0;
                 }
-                Log.i("animationFlag",viewContains(downEventX, downEventY)+"");
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.i("move_animationFlag",animationFlag+"");
                 if(animationFlag == 1){
                     moveEventX = (int)e.getX();
                     moveEventY = (int)e.getY();
@@ -205,10 +212,15 @@ public class CardSlideViewGroup extends ViewGroup {
         measureChildren(widthMeasureSpec, heightMeasureSpec);
         int maxWidth = MeasureSpec.getSize(widthMeasureSpec);
         int maxHeight = MeasureSpec.getSize(heightMeasureSpec);
-        setMeasuredDimension(maxWidth,maxHeight);
-        /*setMeasuredDimension(
-                resolveSizeAndState(maxWidth, widthMeasureSpec, 0),
-                resolveSizeAndState(maxHeight, heightMeasureSpec, 0));*/
+        int viewListSize = viewList.size();
+        for (int i = 0; i < viewListSize; i++) {
+            View child = this.getChildAt(i);
+            this.measureChild(child, widthMeasureSpec, heightMeasureSpec);
+            LayoutParams lParams = (LayoutParams) child.getLayoutParams();
+            lParams.left = 250;
+            lParams.right = maxWidth - 250;
+        }
+        setMeasuredDimension(maxWidth, maxHeight);
         viewGroupWidth = getMeasuredWidth();
         viewGroupHeight = getMeasuredHeight();
     }
@@ -220,13 +232,16 @@ public class CardSlideViewGroup extends ViewGroup {
             View viewItem = viewList.get(i);
             int childHeight = viewItem.getMeasuredHeight();
             int childWidth = viewItem.getMeasuredWidth();
+            //LayoutParams lParams = (LayoutParams) viewItem.getLayoutParams();
+            //viewItem.layout(lParams.left, t, lParams.right, b);
             viewItem.layout(l, t, r, b);
             viewItem.offsetTopAndBottom(cardmarginTop);
-            int offset = heightStep * i;
-            if(i > 2){
-                offset = heightStep *2;
+            Log.i("test","fuck");
+            int offset = 0;
+            if(i >= 1){
+                offset = heightStep;
             }
-            viewItem.offsetTopAndBottom(offset);
+            //viewItem.offsetTopAndBottom(offset);
             initCenterViewLeft = viewList.get(0).getLeft();
             initCenterViewTop = viewList.get(0).getTop();
             initCenterViewRight = viewList.get(0).getRight();
@@ -254,7 +269,6 @@ public class CardSlideViewGroup extends ViewGroup {
      * @return 返回true则足够远可以消失，flase则不够远不能消失
      */
     private boolean viewMoveLongRight(View viewItem){
-        //Log.i("right",viewItem.getRight() + "-" + initCenterViewRight + ":" +(viewItem.getRight() - initCenterViewRight));
         if(viewItem.getRight() - initCenterViewRight > longDistance){
             return true;
         }else {
@@ -268,15 +282,16 @@ public class CardSlideViewGroup extends ViewGroup {
      */
     private void setNextView(int viewOnewX){
         View view1 = viewList.get((CARDNUM + 1) % viewList.size());
+        View view0 = viewList.get(CARDNUM);
         float percent = Math.abs((float) viewOnewX)/(viewGroupWidth/2);
-        if (percent < 1){
+        if (percent < 1 ){
             view1.setAlpha(percent);
+            view0.setAlpha(1.0f - percent);
             int top = cardmarginTop + (int)(((float)heightStep)*(1.0f-percent));
             view1.layout(0, top, view1.getWidth(), top + view1.getHeight());
-            Log.i("",(int) (-(float)heightStep * (1.0f-percent))+"");
         }else {
             viewList.get((CARDNUM+1) % viewList.size()).setAlpha(1.0f);
-            //view1.offsetTopAndBottom(-heightStep);
+            view0.setAlpha(0f);
         }
     }
 
@@ -298,23 +313,23 @@ public class CardSlideViewGroup extends ViewGroup {
 
     /**
      * 播放滑动回去的动画
-     * @param upX 传入的X开始值
-     * @param upY 传入的Y开始值
+     * @param viewsLeft 传入的X开始值
+     * @param viewsRght 传入的Y开始值
      */
-    private void playSlideBackAnim(final int upX, final int upY){
-            final View viewItem = viewList.get(CARDNUM);
-            valueAnimatorBackX = ValueAnimator.ofInt(upX , initCenterViewLeft);
-            valueAnimatorBackX.setDuration(slideAnimationDuration);
-            valueAnimatorBackX.start();
-            valueAnimatorBackX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    frameValueX = (int) valueAnimatorBackX.getAnimatedValue();
-                }
-            });
-            valueAnimatorBackY = ValueAnimator.ofInt(upY , initCenterViewTop);
-            valueAnimatorBackY.setDuration(slideAnimationDuration);
-            valueAnimatorBackY.start();
+    private void playSlideBackAnim(final int viewsLeft, final int viewsRght){
+        final View viewItem = viewList.get(CARDNUM);
+        valueAnimatorBackX = ValueAnimator.ofInt(viewsLeft , initCenterViewLeft);
+        valueAnimatorBackX.setDuration(slideAnimationDuration);
+        valueAnimatorBackX.start();
+        valueAnimatorBackX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                frameValueX = (int) valueAnimatorBackX.getAnimatedValue();
+            }
+        });
+        valueAnimatorBackY = ValueAnimator.ofInt(viewsRght , initCenterViewTop);
+        valueAnimatorBackY.setDuration(slideAnimationDuration);
+        valueAnimatorBackY.start();
         valueAnimatorBackY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -333,10 +348,26 @@ public class CardSlideViewGroup extends ViewGroup {
      * @param viewItemOut 操纵对象view
      * @param direction 方向，-1为左，1为正
      */
-    private void playSlideOutAnimation(View viewItemOut,int direction){
+    int start = 0;
+    private void playSlideOutAnimation(final View viewItemOut,int direction){
+        viewList.get((CARDNUM + viewList.size() - 1) % viewList.size()).setAlpha(0.0f);
+        CardSlideViewItem viewItem = viewList.get((CARDNUM + 2) % viewList.size());
+        if(CARDNUM == 2 && start == 0){
+            start = 1;
+        }
+        if(start == 1) {
+            Log.i("cardIndex",cardIndex+"");
+            viewItem.setData(cardSlideDataItemList.get(cardIndex));
+            cardIndex = (cardIndex+1)%cardSlideDataItemList.size();
+        }
+        Log.i("cardnum", CARDNUM + "");
+        viewList.get((CARDNUM + 1) % viewList.size()).setAlpha(1);
+        viewList.get((CARDNUM + 1) % viewList.size()).layout(0, cardmarginTop, viewList.get((CARDNUM + 1) % viewList.size()).getWidth(), cardmarginTop + viewList.get((CARDNUM + 1) % viewList.size()).getHeight());
+        CARDNUM = (CARDNUM + 1) % viewList.size();
+        //viewList.get((CARDNUM + 2)% viewList.size()).setData(cardSlideDataItemList.get((++cardIndex)%cardSlideDataItemList.size()));
+        //viewList.get((CARDNUM +2)% viewList.size()).setBackgroundResource(cardSlideDataItemList.get((CARDNUM + 2) % viewList.size()).cardslideImgPath);
         viewSlideOut = viewItemOut;
-        viewList.get((CARDNUM+1) % viewList.size()).setAlpha(1);
-        CARDNUM = (CARDNUM+1) % viewList.size();
+        //viewSlideOutList[CARDNUM] = viewItemOut;
         if(direction == -1){//左
             valueAnimatorLeftOutX = ValueAnimator.ofInt(viewItemOut.getLeft(), -viewItemOut.getWidth()).setDuration(slideOutTime);
             valueAnimatorLeftOutX.start();
@@ -352,10 +383,8 @@ public class CardSlideViewGroup extends ViewGroup {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     frameSlideOutY = (int) valueAnimatorLeftOutY.getAnimatedValue();
+                    //setNextView(frameValueX);
                     viewSlideOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewSlideOut.getWidth(), frameSlideOutY + viewSlideOut.getHeight());
-                    /*if (frameSlideOutY == getHeight()){
-                        CARDNUM = (CARDNUM+1) % viewList.size();
-                    }*/
                 }
             });
         } else if (direction == 1){//右
@@ -373,11 +402,8 @@ public class CardSlideViewGroup extends ViewGroup {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     frameSlideOutY = (int)valueAnimatorLeftOutY.getAnimatedValue();
+                    //setNextView(frameValueX);
                     viewSlideOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewSlideOut.getWidth(), frameSlideOutY + viewSlideOut.getHeight());
-                    /*if (frameSlideOutY == getHeight()){
-                        CARDNUM = (CARDNUM+1) % viewList.size();
-                        Log.i("cardnum",CARDNUM+"");
-                    };*/
                 }
             });
         }
@@ -404,9 +430,9 @@ public class CardSlideViewGroup extends ViewGroup {
     public void fillData(List<CardSlideDataItem> dataList) {
         this.cardSlideDataItemList = dataList;
         int num = viewList.size();
+        cardIndex = num;
         for (int i = 0; i < num; i++) {
             CardSlideViewItem itemView = viewList.get(i);
-            Log.i("datalist", i + ":" + dataList.get(i).cardslideImgPath);
             itemView.setData(dataList.get(i));
             if (i != 0){
                 itemView.setAlpha(0f);
@@ -414,6 +440,47 @@ public class CardSlideViewGroup extends ViewGroup {
                 itemView.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    public static class LayoutParams extends ViewGroup.LayoutParams{
+
+        public int left = 0;
+        public int right = 0;
+
+        public LayoutParams(Context c, AttributeSet attrs) {
+            super(c, attrs);
+        }
+
+        public LayoutParams(int width, int height) {
+            super(width, height);
+        }
+
+        public LayoutParams(android.view.ViewGroup.LayoutParams source) {
+            super(source);
+        }
+    }
+
+    @Override
+    public android.view.ViewGroup.LayoutParams generateLayoutParams(
+            AttributeSet attrs) {
+        return new CardSlideViewGroup.LayoutParams(getContext(), attrs);
+    }
+
+    @Override
+    protected android.view.ViewGroup.LayoutParams generateDefaultLayoutParams() {
+        return new LayoutParams(LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT);
+    }
+
+    @Override
+    protected android.view.ViewGroup.LayoutParams generateLayoutParams(
+            android.view.ViewGroup.LayoutParams p) {
+        return new LayoutParams(p);
+    }
+
+    @Override
+    protected boolean checkLayoutParams(android.view.ViewGroup.LayoutParams p) {
+        return p instanceof CardSlideViewGroup.LayoutParams;
     }
 }
 

@@ -54,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private Button btnCardslideViewGroup;
 
+    /**
+     * 开启重复运动加载动画按钮
+     */
+    private Button btnRerunningPorcessbarView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +128,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, CardSlideActivity.class));
+            }
+        });
+        btnRerunningPorcessbarView = (Button)findViewById(R.id.btn_RerunningProcessbar);
+        btnRerunningPorcessbarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, RerunningProcessbarActivity.class));
             }
         });
     }

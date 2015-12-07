@@ -35,6 +35,7 @@
         <activity android:name=".Activity.RecyclerViewActivity"/>
         <activity android:name=".Activity.HeadBarofCoordinatorLayoutActivity"/>
         <activity android:name=".Activity.CardSlideActivity"/>
+        <activity android:name=".Activity.RerunningProcessbarActivity"/>
     </application>
 
 </manifest>

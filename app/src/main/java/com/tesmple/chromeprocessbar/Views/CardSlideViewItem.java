@@ -57,7 +57,7 @@ public class CardSlideViewItem extends LinearLayout {
     }
 
     public void setData(CardSlideDataItem cardSlideDataItem){
-         Log.i("datalist", cardSlideDataItem.cardslideImgPath + "");
+        Log.i("datalist", cardSlideDataItem.cardslideImgPath + "");
         SimpleImageViewUtil simpleImageViewUtil = new SimpleImageViewUtil(getContext());
         int requestWidth = simpleImageViewUtil.dp2pix(200);
         int requestHeight = simpleImageViewUtil.dp2pix(200);

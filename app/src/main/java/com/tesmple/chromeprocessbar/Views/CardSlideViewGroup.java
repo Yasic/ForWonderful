@@ -2,6 +2,7 @@ package com.tesmple.chromeprocessbar.Views;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -32,7 +33,7 @@ public class CardSlideViewGroup extends ViewGroup {
     /**
      * view之间位置差值
      */
-    private int heightStep = 150;
+    private int heightStep = 50;
 
     /**
      * 存储卡片数据列表
@@ -62,6 +63,9 @@ public class CardSlideViewGroup extends ViewGroup {
      */
     private int childWith=0;
 
+    /**
+     * 卡片上部margin值
+     */
     private int cardmarginTop = 30;
 
     private int downEventX;
@@ -95,7 +99,9 @@ public class CardSlideViewGroup extends ViewGroup {
      */
     private ValueAnimator valueAnimatorLeftOutY;
 
-
+    /**
+     * 滑动回去的动画ValueAnimotor
+     */
     private ValueAnimator valueAnimatorBackX;
     private ValueAnimator valueAnimatorBackY;
 
@@ -121,11 +127,6 @@ public class CardSlideViewGroup extends ViewGroup {
     private int CARDNUM = 0;
 
     /**
-     * 滑出屏幕的view数组，我承认这样很low
-     */
-    private View viewSlideOutList[] = new View[4];
-
-    /**
      * 滑出view
      */
     private View viewSlideOut;
@@ -134,6 +135,11 @@ public class CardSlideViewGroup extends ViewGroup {
      * 初始化图片集最后一张坐标
      */
     private int cardIndex = 0;
+
+    /**
+     * 开始动画标记
+     */
+    private int start = 0;
 
     public CardSlideViewGroup(Context context) {
         super(context);
@@ -215,7 +221,10 @@ public class CardSlideViewGroup extends ViewGroup {
         int viewListSize = viewList.size();
         for (int i = 0; i < viewListSize; i++) {
             View child = this.getChildAt(i);
-            this.measureChild(child, widthMeasureSpec, heightMeasureSpec);
+            //this.measureChild(child, widthMeasureSpec, heightMeasureSpec);
+            child.measure( MeasureSpec.makeMeasureSpec(getWidth()/2 + 100,
+                    MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(getHeight(),
+                    MeasureSpec.UNSPECIFIED));
             LayoutParams lParams = (LayoutParams) child.getLayoutParams();
             lParams.left = 250;
             lParams.right = maxWidth - 250;
@@ -348,7 +357,6 @@ public class CardSlideViewGroup extends ViewGroup {
      * @param viewItemOut 操纵对象view
      * @param direction 方向，-1为左，1为正
      */
-    int start = 0;
     private void playSlideOutAnimation(final View viewItemOut,int direction){
         viewList.get((CARDNUM + viewList.size() - 1) % viewList.size()).setAlpha(0.0f);
         CardSlideViewItem viewItem = viewList.get((CARDNUM + 2) % viewList.size());

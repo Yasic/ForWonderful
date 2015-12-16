@@ -6,9 +6,9 @@
     android:background="#f7f8f3">
     <ImageView
         android:id="@+id/iv_cardslide_logo"
-        android:layout_width="match_parent"
-        android:layout_height="260dp"
-        android:scaleType="fitXY"/>
+        android:layout_width="wrap_content"
+        android:layout_height="270dp"
+        android:scaleType="centerCrop"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

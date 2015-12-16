@@ -57,7 +57,7 @@ public class ReruningPorcessbar extends View {
     private void playAnimations(){
         ValueAnimator valueAnimator1 = new ValueAnimator();
         ValueAnimator valueAnimator = new ValueAnimator();
-        valueAnimator.setFloatValues((float)(getWidth())/2 - 2*30*(float)Math.PI , (float)(getWidth())/2 + 2*30*(float)Math.PI);
+        valueAnimator.setFloatValues(-100,100);
         valueAnimator.setDuration(2000);
         valueAnimator.setInterpolator(new LinearInterpolator());
         valueAnimator.setRepeatCount(-1);
@@ -66,15 +66,16 @@ public class ReruningPorcessbar extends View {
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                float framValue = (float)animation.getAnimatedValue();
+                Double framValue = Math.toRadians((Double) animation.getAnimatedValue());
                 if (directions == 1){
-                    circleY = getHeight()/2 + 50*(float) Math.sin(framValue/30);
-                    circleX = framValue;
+                    circleY = getHeight()/2 + 50*(float) Math.sin(framValue);
+                    circleX = (float) (getWidth()/2 - 30 * framValue);
                 } else if (directions == -1){
-                    circleY = getHeight()/2 - 50*(float) Math.sin(framValue/30);
-                    circleX = framValue;
+                    circleY = getHeight()/2 - 50*(float) Math.sin(framValue);
+                    circleX = (float) (getWidth()/2 - 30 * framValue);
                 }
-                if(framValue == (float)(getWidth())/2 + 2*30*(float)Math.PI){
+                Log.i("sinvalue", String.valueOf((float)Math.sin(framValue)) + "+" + framValue);
+                if((float)animation.getAnimatedValue() == 180 || (float)animation.getAnimatedValue() == -180){
                     directions = -directions;
                 }
                 invalidate();

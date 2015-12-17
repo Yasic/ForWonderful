@@ -175,6 +175,7 @@ public class CardSlideViewGroup extends ViewGroup {
         return false;
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         int action = e.getActionMasked();
@@ -215,6 +216,7 @@ public class CardSlideViewGroup extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        //viewList.get((CARDNUM + viewList.size() - 1) % viewList.size()).setAlpha(0.0f);
         measureChildren(widthMeasureSpec, heightMeasureSpec);
         int maxWidth = MeasureSpec.getSize(widthMeasureSpec);
         int maxHeight = MeasureSpec.getSize(heightMeasureSpec);
@@ -245,7 +247,6 @@ public class CardSlideViewGroup extends ViewGroup {
             //viewItem.layout(lParams.left, t, lParams.right, b);
             viewItem.layout(l, t, r, b);
             viewItem.offsetTopAndBottom(cardmarginTop);
-            Log.i("test","fuck");
             int offset = 0;
             if(i >= 1){
                 offset = heightStep;
@@ -340,16 +341,16 @@ public class CardSlideViewGroup extends ViewGroup {
         valueAnimatorBackY.setDuration(slideAnimationDuration);
         valueAnimatorBackY.start();
         valueAnimatorBackY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    frameValueY = (int) valueAnimatorBackY.getAnimatedValue();
-                    setNextView(frameValueX);
-                    viewItem.layout(frameValueX, frameValueY, frameValueX + viewItem.getWidth(), frameValueY + viewItem.getHeight());
-                    if (frameValueY == initCenterViewLeft) {
-                        animationFlag = 0;
-                    }
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                frameValueY = (int) valueAnimatorBackY.getAnimatedValue();
+                setNextView(frameValueX);
+                viewItem.layout(frameValueX, frameValueY, frameValueX + viewItem.getWidth(), frameValueY + viewItem.getHeight());
+                if (frameValueY == initCenterViewLeft) {
+                    animationFlag = 0;
                 }
-            });
+            }
+        });
     }
 
     /**
@@ -358,17 +359,21 @@ public class CardSlideViewGroup extends ViewGroup {
      * @param direction 方向，-1为左，1为正
      */
     private void playSlideOutAnimation(final View viewItemOut,int direction){
+        /*for (int i = 0; i < viewList.size(); i++){
+            if (i != CARDNUM){
+                viewList.get(CARDNUM).setAlpha(0.0f);
+            }
+        }*/
         viewList.get((CARDNUM + viewList.size() - 1) % viewList.size()).setAlpha(0.0f);
+        Log.i("playSlideOutAnimation", CARDNUM + ":" +(CARDNUM + viewList.size() - 1) % viewList.size());
         CardSlideViewItem viewItem = viewList.get((CARDNUM + 2) % viewList.size());
         if(CARDNUM == 2 && start == 0){
             start = 1;
         }
         if(start == 1) {
-            Log.i("cardIndex",cardIndex+"");
             viewItem.setData(cardSlideDataItemList.get(cardIndex));
             cardIndex = (cardIndex+1)%cardSlideDataItemList.size();
         }
-        Log.i("cardnum", CARDNUM + "");
         viewList.get((CARDNUM + 1) % viewList.size()).setAlpha(1);
         viewList.get((CARDNUM + 1) % viewList.size()).layout(0, cardmarginTop, viewList.get((CARDNUM + 1) % viewList.size()).getWidth(), cardmarginTop + viewList.get((CARDNUM + 1) % viewList.size()).getHeight());
         CARDNUM = (CARDNUM + 1) % viewList.size();
@@ -391,7 +396,7 @@ public class CardSlideViewGroup extends ViewGroup {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     frameSlideOutY = (int) valueAnimatorLeftOutY.getAnimatedValue();
-                    //setNextView(frameValueX);
+                    setNextView(frameValueX);
                     viewSlideOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewSlideOut.getWidth(), frameSlideOutY + viewSlideOut.getHeight());
                 }
             });
@@ -410,7 +415,7 @@ public class CardSlideViewGroup extends ViewGroup {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     frameSlideOutY = (int)valueAnimatorLeftOutY.getAnimatedValue();
-                    //setNextView(frameValueX);
+                    setNextView(frameValueX);
                     viewSlideOut.layout(frameSlideOutX, frameSlideOutY, frameSlideOutX + viewSlideOut.getWidth(), frameSlideOutY + viewSlideOut.getHeight());
                 }
             });
@@ -449,6 +454,14 @@ public class CardSlideViewGroup extends ViewGroup {
             }
         }
     }
+
+    /**
+     * 避免由于熄屏后再度打开引起的onMeasure方法调用导致未完全消失的视图显示出错问题
+     */
+    public void refreshView(){
+        viewList.get((CARDNUM + viewList.size() - 1) % viewList.size()).setAlpha(0.0f);
+    }
+
 
     public static class LayoutParams extends ViewGroup.LayoutParams{
 

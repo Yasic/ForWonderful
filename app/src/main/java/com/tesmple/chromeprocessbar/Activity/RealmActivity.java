@@ -9,7 +9,10 @@ import android.widget.TextView;
 import com.tesmple.chromeprocessbar.R;
 import com.tesmple.chromeprocessbar.RealmJaveBean.People;
 
+import org.json.JSONObject;
+
 import io.realm.Realm;
+import io.realm.RealmAsyncTask;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
@@ -30,31 +33,56 @@ public class RealmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_realm);
         tvPeople = (TextView)findViewById(R.id.tv_people);
         Realm realm = Realm.getInstance(new RealmConfiguration.Builder(getApplicationContext()).name("Peopel.realm").build());
-        //beginRealmTransaction(realm);
+        beginRealmTransaction(realm);
         requryFromRealm(realm);
     }
 
     private void beginRealmTransaction(Realm realm){
-        realm.beginTransaction();
+        /*realm.beginTransaction();
         People yasic = realm.createObject(People.class);
         yasic.setName("Yasic");
         yasic.setAge("20");
         yasic.setSex("Male");
-        realm.commitTransaction();
+        realm.commitTransaction();*/
 
-        People esir = new People("Esir", "famale", "19");
+        /*People esir = new People("Esir", "famale", "19");
         realm.beginTransaction();
-        People copy = realm.copyToRealm(esir);
-        realm.commitTransaction();
+        realm.copyToRealm(esir);
+        realm.commitTransaction();*/
+
+
+        realm.executeTransaction(
+                new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        People yasic = realm.createObject(People.class);
+                        yasic.setName("Yasic");
+                        yasic.setAge("20");
+                        yasic.setSex("Male");
+                    }},
+                new Realm.Transaction.Callback() {
+                    @Override
+                    public void onSuccess() {
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.i("error",e.toString());
+                    }
+                });
     }
 
     private void requryFromRealm(Realm realm){
         RealmResults<People> results1 =
                 realm.where(People.class).findAll();
 
-        for(People c:results1) {
-            Log.d("results", c.getName());
-            peopleInfo = peopleInfo + c.getName() + "-" + c.getSex() + "-" + c.getAge() + "\n";
+        if(results1.size() == 0) {
+            peopleInfo = "Target not found!";
+        }else {
+            for (People c : results1) {
+                Log.d("results", c.getName());
+                peopleInfo = peopleInfo + c.getName() + "-" + c.getSex() + "-" + c.getAge() + "\n";
+            }
         }
         tvPeople.setText(peopleInfo);
     }

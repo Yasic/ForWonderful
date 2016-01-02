@@ -27,4 +27,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.jakewharton.scalpel:scalpel:1.1.2'
     compile 'com.android.support:design:22.2.0'
+    compile 'io.realm:realm-android:0.84.1'
 }

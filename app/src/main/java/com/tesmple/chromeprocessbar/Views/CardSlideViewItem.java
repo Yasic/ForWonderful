@@ -54,6 +54,7 @@ public class CardSlideViewItem extends LinearLayout {
         ivCardslideLogo = (ImageView)findViewById(R.id.iv_cardslide_logo);
         tvCardslideName = (TextView)findViewById(R.id.tv_cardslide_name);
         tvCardslideDistance  = (TextView)findViewById(R.id.tv_cardslide_distance);
+
     }
 
     public void setData(CardSlideDataItem cardSlideDataItem){

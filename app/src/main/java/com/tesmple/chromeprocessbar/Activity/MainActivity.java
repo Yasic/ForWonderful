@@ -59,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private Button btnRerunningPorcessbarView;
 
+    /**
+     * 开启realm测试
+     */
+    private Button btnRealmActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +140,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, RerunningProcessbarActivity.class));
+            }
+        });
+        btnRealmActivity = (Button)findViewById(R.id.btn_RealmActivity);
+        btnRealmActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, RealmActivity.class));
             }
         });
     }

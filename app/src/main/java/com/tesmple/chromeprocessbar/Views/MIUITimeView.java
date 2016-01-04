@@ -137,7 +137,8 @@ public class MIUITimeView extends View {
             {3, Color.parseColor("#cff7f8f3")},
             {3, Color.parseColor("#cff7f8f3")},
             {4, Color.parseColor("#bff7f8f3")},
-            {4, Color.parseColor("#bff7f8f3")},
+            {4, Color.parseColor("#00f7f8f3")},
+            /*{4, Color.parseColor("#bff7f8f3")},
             {4, Color.parseColor("#aff7f8f3")},
             {4, Color.parseColor("#aff7f8f3")},
             {5, Color.parseColor("#9ff7f8f3")},
@@ -145,7 +146,7 @@ public class MIUITimeView extends View {
             {5, Color.parseColor("#97f7f8f3")},
             {6, Color.parseColor("#8ff7f8f3")},
             {6, Color.parseColor("#87f7f8f3")},
-            {7, Color.parseColor("#00f7f8f3")},
+            {7, Color.parseColor("#80f7f8f3")},*/
     };
 
     Handler handler = new Handler(){

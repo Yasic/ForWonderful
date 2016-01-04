@@ -28,7 +28,7 @@ public class SimpleImageViewUtil {
         return BitmapFactory.decodeResource(resources,resId, options);
     }
 
-    public int getFitInSampleSize(int requestWidth, int requestHeight, BitmapFactory.Options options){
+    private int getFitInSampleSize(int requestWidth, int requestHeight, BitmapFactory.Options options){
         int inSampleSize = 1;
         if (options.outWidth > requestWidth || options.outHeight > requestHeight){
             int widthRatio = Math.round((float)options.outWidth / (float) requestWidth);

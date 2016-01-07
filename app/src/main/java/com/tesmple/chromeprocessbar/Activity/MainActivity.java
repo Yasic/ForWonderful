@@ -118,14 +118,14 @@ public class MainActivity extends AppCompatActivity {
         btnRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, RecyclerViewActivity.class));
+                startActivity(new Intent(MainActivity.this, HeaderRecyclerViewActivity.class));
             }
         });
         btnHeadbarCoordinatorlayout = (Button)findViewById(R.id.btn_HeadbarCoordinatorlayout);
         btnHeadbarCoordinatorlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, HeadBarofCoordinatorLayoutActivity.class));
+                startActivity(new Intent(MainActivity.this, FootbarOfCoordinatorLayoutActivity.class));
             }
         });
         btnCardslideViewGroup = (Button)findViewById(R.id.btn_CardslideViewGroup);

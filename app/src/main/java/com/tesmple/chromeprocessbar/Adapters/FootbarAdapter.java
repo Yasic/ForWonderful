@@ -1,6 +1,5 @@
 package com.tesmple.chromeprocessbar.Adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,7 @@ import com.tesmple.chromeprocessbar.R;
 /**
  * Created by ESIR on 2015/12/1.
  */
-public class MyListViewHeaderAdapter extends MyHeaderAdapter<String> {
+public class FootbarAdapter extends HeaderRecyclerViewAdapter<String> {
     @Override
     public RecyclerView.ViewHolder onCreate(ViewGroup parent, int viewType) {
         View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_itemofheaderview, parent, false);
@@ -26,7 +25,7 @@ public class MyListViewHeaderAdapter extends MyHeaderAdapter<String> {
         }
     }
 
-    class MyHolder extends MyHeaderAdapter.Holder {
+    class MyHolder extends HeaderRecyclerViewAdapter.Holder {
         TextView text;
         public MyHolder(View itemView) {
             super(itemView);

@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 /**
  * Created by ESIR on 2015/12/1.
  */
-public abstract class MyHeaderAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class HeaderRecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /**
      * 两个参数
@@ -34,7 +34,7 @@ public abstract class MyHeaderAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     /**
      * recyclerview头部布局
      */
-    private View mHeaderView;
+    private View mHeaderView = null;
 
     /**
      * 监听者
@@ -45,11 +45,19 @@ public abstract class MyHeaderAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         mListener = li;
     }
 
+    /**
+     * 设置头部布局
+     * @param headerView 传入头部布局
+     */
     public void setHeaderView(View headerView) {
         mHeaderView = headerView;
         notifyItemInserted(0);
     }
 
+    /**
+     * 获取头部布局
+     * @return 返回头部布局，可能为null
+     */
     public View getHeaderView() {
         return mHeaderView;
     }
@@ -59,12 +67,18 @@ public abstract class MyHeaderAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         notifyDataSetChanged();
     }
 
+    /**
+     * 获得此item的类型
+     * @param position 传入类型
+     * @return 如果头部view为空则是普通类型，否则判断如果position==0则是头部，返回头部类型
+     */
     @Override
     public int getItemViewType(int position) {
         if(mHeaderView == null) return TYPE_NORMAL;//未设置头部布局
         if(position == 0) return TYPE_HEADER;//检测是否是第一个数据
         return TYPE_NORMAL;
     }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
@@ -94,7 +108,6 @@ public abstract class MyHeaderAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if(manager instanceof GridLayoutManager) {
             final GridLayoutManager gridManager = ((GridLayoutManager) manager);
@@ -120,14 +133,14 @@ public abstract class MyHeaderAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
-    public int getRealPosition(RecyclerView.ViewHolder holder) {
-        int position = holder.getPosition();
-        return mHeaderView == null ? position : position - 1;
-    }
-
     @Override
     public int getItemCount() {
         return mHeaderView == null ? mDatas.size() : mDatas.size() + 1;
+    }
+
+    public int getRealPosition(RecyclerView.ViewHolder holder) {
+        int position = holder.getPosition();
+        return mHeaderView == null ? position : position - 1;
     }
 
     public abstract RecyclerView.ViewHolder onCreate(ViewGroup parent, final int viewType);

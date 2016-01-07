@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.view.ViewPropertyAnimator;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
-import com.tesmple.chromeprocessbar.Adapters.MyListViewHeaderAdapter;
 import com.tesmple.chromeprocessbar.Adapters.NormalAdapter;
 import com.tesmple.chromeprocessbar.R;
 
@@ -24,7 +22,7 @@ import Listener.FootbarRecyclerViewListener;
 /**
  * Created by ESIR on 2015/12/2.
  */
-public class HeadBarofCoordinatorLayoutActivity extends Activity {
+public class FootbarOfCoordinatorLayoutActivity extends Activity {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private NormalAdapter mNormalAdapter;

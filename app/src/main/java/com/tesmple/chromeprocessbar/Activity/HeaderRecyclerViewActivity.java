@@ -6,12 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.jakewharton.scalpel.ScalpelFrameLayout;
-import com.tesmple.chromeprocessbar.Adapters.MyHeaderAdapter;
-import com.tesmple.chromeprocessbar.Adapters.MyListViewHeaderAdapter;
+import com.tesmple.chromeprocessbar.Adapters.FootbarAdapter;
 import com.tesmple.chromeprocessbar.R;
 
 import java.util.ArrayList;
@@ -19,10 +16,10 @@ import java.util.ArrayList;
 /**
  * Created by ESIR on 2015/12/1.
  */
-public class RecyclerViewActivity extends AppCompatActivity {
+public class HeaderRecyclerViewActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private MyListViewHeaderAdapter mHeaderAdapter;
+    private FootbarAdapter mHeaderAdapter;
     private ScalpelFrameLayout scalpelFrameLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +28,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView)findViewById(R.id.rl_recyclerview);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mHeaderAdapter = new MyListViewHeaderAdapter();
+        mHeaderAdapter = new FootbarAdapter();
         ArrayList<String> datas = new ArrayList<>();
         datas.add("威风堂堂");
         datas.add("玉树临风");
